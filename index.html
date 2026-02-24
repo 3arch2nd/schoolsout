@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👾 우리반 하교 퀘스트</title>
+    <style>
+        /* 폰트 설정 */
+        @font-face {
+            font-family: 'NeoDunggeunGothicPro';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/NeoDunggeunmoPro-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-display: swap;
+        }
+
+        /* 기본 리셋 및 마인크래프트 느낌의 배경 설정 */
+        * {
+            box-sizing: border-box;
+            font-family: 'NeoDunggeunGothicPro', sans-serif;
+        }
+
+        body {
+            background-color: #70b23f; /* 잔디 블록 윗면 색상 */
+            background-image: linear-gradient(45deg, rgba(0,0,0,0.05) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05)),
+                              linear-gradient(45deg, rgba(0,0,0,0.05) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05));
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* 상단 컨트롤 패널 */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* 8비트 스타일 버튼 */
+        button, select, input[type="text"] {
+            font-size: 1.1rem;
+            padding: 8px 16px;
+            background-color: #c6c6c6;
+            border: 4px solid #000;
+            box-shadow: inset -4px -4px 0px rgba(0,0,0,0.2), inset 4px 4px 0px rgba(255,255,255,0.7);
+            cursor: pointer;
+            outline: none;
+        }
+        button:active {
+            box-shadow: inset 4px 4px 0px rgba(0,0,0,0.2);
+            padding: 10px 14px 6px 18px; /* 눌리는 효과 */
+        }
+        
+        .btn-fullscreen { background-color: #55ffff; }
+
+        /* 메인 컨테이너 */
+        .container {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        /* 각 섹션 공통 스타일 (인벤토리/UI 창 느낌) */
+        .section {
+            background-color: #c6c6c6;
+            border: 6px solid #000;
+            box-shadow: inset -6px -6px 0px rgba(0,0,0,0.3), inset 6px 6px 0px rgba(255,255,255,0.8);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+
+        /* 모드에 따른 넓이 조절 */
+        .split-mode .section { width: 50%; }
+        .notice-mode .notice-section { width: 100%; }
+        .notice-mode .checklist-section { display: none; }
+        .checklist-mode .notice-section { display: none; }
+        .checklist-mode .checklist-section { width: 100%; }
+
+        /* 제목 스타일 */
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 4px dashed #555;
+            color: #333;
+            font-size: 2rem;
+            text-shadow: 2px 2px 0px #fff;
+        }
+
+        /* 알림장 영역 */
+        .date-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #0000aa;
+        }
+
+        textarea.notice-content {
+            width: 100%;
+            flex: 1;
+            resize: none;
+            background-color: #fff;
+            border: 4px solid #555;
+            box-shadow: inset 4px 4px 0px rgba(0,0,0,0.1);
+            font-size: 1.5rem;
+            padding: 15px;
+            line-height: 1.6;
+        }
+
+        .admin-controls {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            background: #aaa;
+            padding: 10px;
+            border: 4px solid #555;
+        }
+
+        /* 체크리스트 영역 */
+        .checklist-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            background-color: #e0e0e0;
+            border: 4px solid #555;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+            padding: 15px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .check-item:hover { transform: translateY(-2px); }
+
+        .check-item.fixed-end {
+            background-color: #ffaa00; /* 황금 사과 느낌의 색상 */
+            border-color: #aa0000;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 0px #000;
+            margin-top: auto; /* 항상 아래로 밀어냄 */
+        }
+
+        .check-box {
+            width: 30px;
+            height: 30px;
+            border: 4px solid #000;
+            background-color: #fff;
+            margin-right: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: #ff5555;
+        }
+
+        .check-item.completed .check-box::after { content: '✔'; }
+        .check-item.completed span { text-decoration: line-through; color: #777; }
+        .check-item.fixed-end.completed span { color: #ffe; }
+
+        .add-checklist {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        .add-checklist input { flex: 1; }
+
+        /* 모바일 대응 */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .split-mode .section { width: 100%; height: 50%; }
+            body { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <button onclick="setViewMode('split')">📖 전체 보기</button>
+        <button onclick="setViewMode('notice')">📝 알림장만</button>
+        <button onclick="setViewMode('checklist')">✅ 체크리스트만</button>
+        <button class="btn-fullscreen" onclick="toggleFullScreen()">🖥️ 전체화면</button>
+    </div>
+
+    <div class="container split-mode" id="mainContainer">
+        
+        <div class="section notice-section">
+            <h2>📢 오늘의 알림장</h2>
+            <div class="date-display" id="dateDisplay"></div>
+            <textarea class="notice-content" id="noticeText">1. </textarea>
+            
+            <div class="admin-controls">
+                <select id="categorySelect">
+                    <option value="안전">🛡️ 안전</option>
+                    <option value="안내장">📄 안내장</option>
+                    <option value="준비물">✂️ 준비물</option>
+                </select>
+                <button onclick="loadFromGAS()">불러오기</button>
+                <button onclick="saveToGAS()" style="background-color: #55ff55;">저장하기</button>
+            </div>
+        </div>
+
+        <div class="section checklist-section">
+            <h2>🎒 하교 전 확인했나요?</h2>
+            
+            <div class="add-checklist">
+                <input type="text" id="newCheckInput" placeholder="오늘의 특별 퀘스트 입력 (예: 미술 작품 챙기기)" onkeypress="if(event.key==='Enter') addCheckItem()">
+                <button onclick="addCheckItem()">➕ 추가</button>
+            </div>
+
+            <div class="checklist-items" id="checklistContainer">
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box"></div><span>미니 빗자루로 책상 아래 쓸기</span>
+                </div>
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box"></div><span>책상 서랍 정돈하기</span>
+                </div>
+                <div class="check-item" onclick="toggleCheck(this)">
+                    <div class="check-box"></div><span>교과서 사물함에 세워서 꽂아두기</span>
+                </div>
+                
+                <div class="check-item fixed-end" onclick="toggleCheck(this)" id="finalCheckItem">
+                    <div class="check-box"></div><span>모두 완료한 사람은 선생님께 인사 드리고 하교하기!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. 날짜 자동 갱신 (한국 시간 기준)
+        function updateDate() {
+            const now = new Date();
+            const options = { timeZone: 'Asia/Seoul', year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
+            const formatter = new Intl.DateTimeFormat('ko-KR', options);
+            document.getElementById('dateDisplay').innerText = formatter.format(now);
+        }
+        updateDate(); // 실행
+
+        // 2. 화면 모드 변경
+        function setViewMode(mode) {
+            const container = document.getElementById('mainContainer');
+            container.className = 'container'; // 클래스 초기화
+            container.classList.add(mode + '-mode');
+        }
+
+        // 3. 전체화면 토글
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`전체화면 모드를 켤 수 없습니다: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // 4. 체크리스트 추가 및 토글 기능
+        function toggleCheck(element) {
+            element.classList.toggle('completed');
+        }
+
+        function addCheckItem() {
+            const input = document.getElementById('newCheckInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const container = document.getElementById('checklistContainer');
+            const finalItem = document.getElementById('finalCheckItem');
+            
+            // 새 항목 생성
+            const newItem = document.createElement('div');
+            newItem.className = 'check-item';
+            newItem.onclick = function() { toggleCheck(this); };
+            newItem.innerHTML = `<div class="check-box"></div><span>${text}</span>`;
+            
+            // 마지막 고정 항목 '앞에' 추가
+            container.insertBefore(newItem, finalItem);
+            input.value = ''; // 입력창 비우기
+        }
+
+        // 5. GAS 연동 함수 (현재는 콘솔 로그 및 알림만 띄우는 가짜 로직)
+        // 실제 사용 시 구글 앱스 스크립트 웹앱 URL을 입력해야 합니다.
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbwgfSOBttYyvOTPNm8AWwnwn4rL2M33Q07_cVRcIHLQsEZROx88RAGqGdwWL5rO_GlQ/exec"; 
+
+        function loadFromGAS() {
+            const category = document.getElementById('categorySelect').value;
+            // 💡 추후 GAS와 실제 연결 시 fetch()를 사용하게 됩니다.
+            // 지금은 임시 텍스트를 넣어줄게요!
+            alert(`[${category}] 템플릿을 구글 시트에서 불러옵니다! (현재는 시뮬레이션입니다)`);
+            
+            let tempText = "";
+            if(category === "안전") tempText = "1. 길을 건널 때 좌우 살피기\n2. 낯선 사람 따라가지 않기";
+            if(category === "안내장") tempText = "1. 급식 식단표 부모님께 전달하기\n2. 방과후 학교 신청서 내일까지!";
+            if(category === "준비물") tempText = "1. 미술 시간: 크레파스, 가위, 풀\n2. 실내화 세탁해 오기";
+
+            document.getElementById('noticeText').value = tempText;
+        }
+
+        function saveToGAS() {
+            const category = document.getElementById('categorySelect').value;
+            const content = document.getElementById('noticeText').value;
+            alert(`[${category}] 내용이 구글 시트에 저장되었습니다!\n\n저장된 내용:\n${content}`);
+            // 💡 실제 구현 시: fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ category, content }) })
+        }
+    </script>
+</body>
+</html>
