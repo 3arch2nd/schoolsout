@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>👾 우리반 하교 퀘스트</title>
     <style>
-        /* 폰트 설정 */
         @font-face {
             font-family: 'NeoDunggeunGothicPro';
             src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/NeoDunggeunmoPro-Regular.woff2') format('woff2');
@@ -13,313 +12,264 @@
             font-display: swap;
         }
 
-        /* 기본 리셋 및 마인크래프트 느낌의 배경 설정 */
+        :root {
+            --content-font-size: 25px; 
+        }
+
         * {
             box-sizing: border-box;
             font-family: 'NeoDunggeunGothicPro', sans-serif;
         }
-
+        
         body {
-            background-color: #70b23f; /* 잔디 블록 윗면 색상 */
-            background-image: linear-gradient(45deg, rgba(0,0,0,0.05) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05)),
-                              linear-gradient(45deg, rgba(0,0,0,0.05) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05));
-            background-size: 40px 40px;
-            background-position: 0 0, 20px 20px;
+            background-color: #8b5a2b; 
             margin: 0;
-            padding: 20px;
+            padding: 50px 20px 20px 20px;
             display: flex;
             flex-direction: column;
             height: 100vh;
+            position: relative;
+            overflow: hidden; 
         }
 
-        /* 상단 컨트롤 패널 */
+        .grass-top {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 100px; 
+            z-index: -1;
+        }
+
         .controls {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
         }
 
-        /* 8비트 스타일 버튼 */
-        button, select, input[type="text"] {
-            font-size: 1.1rem;
-            padding: 8px 16px;
-            background-color: #c6c6c6;
-            border: 4px solid #000;
-            box-shadow: inset -4px -4px 0px rgba(0,0,0,0.2), inset 4px 4px 0px rgba(255,255,255,0.7);
+        button, input[type="text"] {
+            font-size: 14px; 
+            padding: 6px 12px; 
+            background-color: #e0e0e0;
+            border: 3px solid #000;
+            box-shadow: inset -3px -3px 0px rgba(0,0,0,0.2), inset 3px 3px 0px rgba(255,255,255,0.7);
             cursor: pointer;
             outline: none;
+            transition: background-color 0.2s;
         }
         button:active {
-            box-shadow: inset 4px 4px 0px rgba(0,0,0,0.2);
-            padding: 10px 14px 6px 18px; /* 눌리는 효과 */
+            box-shadow: inset 3px 3px 0px rgba(0,0,0,0.2);
+            padding: 8px 10px 4px 14px;
         }
         
         .btn-fullscreen { background-color: #55ffff; }
+        .btn-font { background-color: #ffff55; font-weight: bold; }
 
-        /* 메인 컨테이너 */
         .container {
             display: flex;
-            gap: 20px;
             flex: 1;
-            transition: all 0.3s ease;
+            transition: gap 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            min-height: 0; 
+            min-width: 0;
         }
+        
+        .container.split-mode { gap: 20px; }
+        .container.notice-mode { gap: 0px; }
+        .container.checklist-mode { gap: 0px; }
 
-        /* 각 섹션 공통 스타일 (인벤토리/UI 창 느낌) */
         .section {
-            background-color: #c6c6c6;
-            border: 6px solid #000;
-            box-shadow: inset -6px -6px 0px rgba(0,0,0,0.3), inset 6px 6px 0px rgba(255,255,255,0.8);
-            padding: 20px;
+            background-color: #f9f9f9; 
+            border: 5px solid #333;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
-            transition: all 0.3s ease;
             overflow-y: auto;
+            overflow-x: hidden; 
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            min-height: 0; 
+            min-width: 0;  
         }
 
-        /* 모드에 따른 넓이 조절 */
-        .split-mode .section { width: 50%; }
-        .notice-mode .notice-section { width: 100%; }
-        .notice-mode .checklist-section { display: none; }
-        .checklist-mode .notice-section { display: none; }
-        .checklist-mode .checklist-section { width: 100%; }
+        .split-mode .section { flex: 1; padding: 15px; border-width: 5px; opacity: 1; }
+        .notice-mode .notice-section { flex: 1; padding: 15px; border-width: 5px; opacity: 1; }
+        .notice-mode .checklist-section { flex: 0; padding: 0; border-width: 0; margin: 0; opacity: 0; }
+        .checklist-mode .checklist-section { flex: 1; padding: 15px; border-width: 5px; opacity: 1; }
+        .checklist-mode .notice-section { flex: 0; padding: 0; border-width: 0; margin: 0; opacity: 0; }
 
-        /* 제목 스타일 */
         h2 {
-            text-align: center;
-            margin-top: 0;
-            padding-bottom: 10px;
-            border-bottom: 4px dashed #555;
-            color: #333;
-            font-size: 2rem;
-            text-shadow: 2px 2px 0px #fff;
+            text-align: center; margin: 0 0 10px 0; padding-bottom: 10px;
+            border-bottom: 3px solid #ccc; color: #222;
+            font-size: calc(var(--content-font-size) * 1.2);
+            transition: font-size 0.2s ease; white-space: nowrap; 
         }
 
-        /* 알림장 영역 */
         .date-display {
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 15px;
-            color: #0000aa;
+            font-weight: normal; text-align: center; margin-bottom: 10px; color: #0000aa;
+            font-size: calc(var(--content-font-size) * 1.2); transition: font-size 0.2s ease;
         }
 
         textarea.notice-content {
-            width: 100%;
-            flex: 1;
-            resize: none;
-            background-color: #fff;
-            border: 4px solid #555;
-            box-shadow: inset 4px 4px 0px rgba(0,0,0,0.1);
-            font-size: 1.5rem;
-            padding: 15px;
-            line-height: 1.6;
+            width: 100%; flex: 1; resize: none; background-color: #fff; border: 3px solid #888;
+            padding: 15px; line-height: 1.6; font-size: calc(var(--content-font-size) * 1.2);
+            transition: font-size 0.2s ease; min-height: 0; 
         }
-
+        
         .admin-controls {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-            background: #aaa;
-            padding: 10px;
-            border: 4px solid #555;
+            margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px;
+            align-items: stretch; background: #e9e9e9; padding: 10px; border: 3px solid #888;
         }
 
-        /* 체크리스트 영역 */
-        .checklist-items {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            flex: 1;
+        .custom-select-container {
+            position: relative; font-size: 1.1rem; user-select: none; z-index: 10;
         }
+        
+        .custom-select-header {
+            background: #fff; border: 3px solid #888; padding: 8px 12px;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            height: 4.5rem; box-sizing: border-box;
+        }
+        .custom-select-header::after { content: '▲'; font-size: 0.8rem; margin-left: 10px; color: #555; flex-shrink: 0; }
+
+        .custom-select-header-text {
+            flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; text-overflow: ellipsis; line-height: 1.4; word-break: keep-all; 
+        }
+        
+        .custom-select-list {
+            position: absolute; bottom: calc(100% - 3px); left: 0; right: 0;
+            background: #fff; border: 3px solid #888; z-index: 1000; 
+            max-height: 250px; overflow-y: auto; box-shadow: 4px -4px 0px rgba(0,0,0,0.2); 
+            display: none;
+        }
+        .custom-select-container.open .custom-select-list { display: block; }
+        
+        .custom-select-item {
+            padding: 10px 12px; border-bottom: 2px dashed #eee; display: flex;
+            justify-content: space-between; align-items: center; cursor: pointer; font-size: 1.1rem;
+        }
+        .custom-select-item:hover { background: #f0f0f0; }
+        .custom-select-item span { flex: 1; pointer-events: none; } 
+        
+        .custom-del-btn, .delete-btn {
+            background: none; border: none; box-shadow: none;
+            color: #aaaaaa; cursor: pointer; padding: 0 5px; font-size: 1.3rem;
+        }
+        .custom-del-btn:hover, .delete-btn:hover { color: #888888; transform: scale(1.2); }
+        
+        .custom-add-btn {
+            padding: 12px; text-align: center; color: #0000aa; font-weight: bold; cursor: pointer; font-size: 1.1rem;
+            border-top: 2px solid #888; background: #f9f9ff;
+        }
+        .custom-add-btn:hover { background: #eef; }
+
+        .btn-clear { background-color: #ffaaaa; color: #cc0000; font-weight: bold; }
+
+        .checklist-items { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0; }
 
         .check-item {
-            display: flex;
-            align-items: center;
-            background-color: #e0e0e0;
-            border: 4px solid #555;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
-            padding: 15px;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: transform 0.1s;
+            display: flex; align-items: center; background-color: #fff; border: 3px solid #555;
+            padding: 10px; font-size: var(--content-font-size); transition: font-size 0.2s ease; cursor: grab; 
         }
-        .check-item:hover { transform: translateY(-2px); }
-
-        .check-item.fixed-end {
-            background-color: #ffaa00; /* 황금 사과 느낌의 색상 */
-            border-color: #aa0000;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 2px 2px 0px #000;
-            margin-top: auto; /* 항상 아래로 밀어냄 */
-        }
+        .check-item:active { cursor: grabbing; } 
 
         .check-box {
-            width: 30px;
-            height: 30px;
-            border: 4px solid #000;
-            background-color: #fff;
-            margin-right: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            color: #ff5555;
+            width: 24px; height: 24px; border: 3px solid #000; background-color: #eee; margin-right: 15px;
+            display: flex; justify-content: center; align-items: center; font-size: 1.2rem; color: #ff5555;
+            flex-shrink: 0; cursor: pointer; 
         }
 
+        .check-item span {
+            flex: 0 1 auto; min-width: 50px; padding: 2px 5px; outline: none; border-bottom: 2px solid transparent; cursor: text;
+        }
+        .check-item span[contenteditable="true"] {
+            border-bottom: 2px dashed #ffaa00; background-color: rgba(0,0,0,0.05);
+            text-decoration: none !important; color: #000 !important; cursor: text;
+        }
+
+        .delete-btn { margin-left: auto; } 
         .check-item.completed .check-box::after { content: '✔'; }
-        .check-item.completed span { text-decoration: line-through; color: #777; }
-        .check-item.fixed-end.completed span { color: #ffe; }
+        .check-item.completed span { text-decoration: line-through; color: #999; }
 
-        .add-checklist {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            margin-bottom: 15px;
+        .check-item.fixed-end {
+            display: block; text-align: center; background-color: #ffaa00; border-color: #aa0000;
+            font-weight: normal; color: #fff; text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+            margin-top: auto; cursor: default; font-size: calc(var(--content-font-size) * 1.2);
+            line-height: 1.4; padding: 15px;
         }
+        
+        .check-item.fixed-end span { display: inline-block; cursor: text; padding: 5px; border-bottom: 2px solid transparent; min-width: 200px; }
+        .check-item.fixed-end span[contenteditable="true"] { border-bottom: 2px dashed #fff; background-color: rgba(0,0,0,0.2); text-shadow: none; color: #fff !important; }
+
+        .add-checklist { display: flex; gap: 5px; margin-bottom: 10px; }
         .add-checklist input { flex: 1; }
 
-        /* 모바일 대응 */
-        @media (max-width: 768px) {
-            .container { flex-direction: column; }
-            .split-mode .section { width: 100%; height: 50%; }
-            body { padding: 10px; }
-        }
+        .drag-placeholder { height: 6px; background-color: #888888; border-radius: 3px; margin: 2px 0; pointer-events: none; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 5000; }
+        .modal-box { background: #f9f9f9; border: 5px solid #333; box-shadow: 6px 6px 0px rgba(0,0,0,0.5); padding: 20px; width: 400px; max-width: 90%; text-align: center; }
+        .modal-box h3 { margin-top: 0; font-size: 1.5rem; border-bottom: 3px dashed #ccc; padding-bottom: 10px; }
+        .modal-box p { font-size: 1.1rem; color: #333; margin-bottom: 15px; line-height: 1.5; }
+        .modal-box input { width: 100%; margin-bottom: 20px; font-size: 1.2rem; text-align: center; padding: 10px; border: 3px solid #888; }
+        .modal-buttons { display: flex; gap: 10px; }
+        .modal-buttons button { flex: 1; font-size: 1.2rem; padding: 15px 20px; min-height: 55px; }
+
+        @media (max-width: 768px) { .container { flex-direction: column; } .split-mode .section { width: 100%; flex: 1; } }
     </style>
 </head>
 <body>
 
+    <div id="customModal" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <h3 id="modalTitle">제목</h3>
+            <p id="modalDesc"></p>
+            <input type="text" id="modalInput">
+            <div class="modal-buttons">
+                <button id="modalOkBtn" style="background-color: #55ff55;">확인</button>
+                <button id="modalCancelBtn" style="background-color: #ffaaaa;">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="grass-top"></div>
+
     <div class="controls">
-        <button onclick="setViewMode('split')">📖 전체 보기</button>
-        <button onclick="setViewMode('notice')">📝 알림장만</button>
-        <button onclick="setViewMode('checklist')">✅ 체크리스트만</button>
-        <button class="btn-fullscreen" onclick="toggleFullScreen()">🖥️ 전체화면</button>
+        <button onclick="setViewMode('split')">📖 둘 다 보기</button>
+        <button onclick="setViewMode('notice')">📝 알림장</button>
+        <button onclick="setViewMode('checklist')">✅ 체크리스트</button>
+        <button id="fullscreenBtn" class="btn-fullscreen" onclick="toggleFullScreen()">🖥️ 전체화면</button>
+        <button class="btn-font" onclick="changeFontSize(-2)">-가</button>
+        <button class="btn-font" onclick="changeFontSize(2)">+가</button>
     </div>
 
     <div class="container split-mode" id="mainContainer">
-        
         <div class="section notice-section">
             <h2>📢 오늘의 알림장</h2>
             <div class="date-display" id="dateDisplay"></div>
-            <textarea class="notice-content" id="noticeText">1. </textarea>
-            
+            <textarea class="notice-content" id="noticeText"></textarea>
             <div class="admin-controls">
-                <select id="categorySelect">
-                    <option value="안전">🛡️ 안전</option>
-                    <option value="안내장">📄 안내장</option>
-                    <option value="준비물">✂️ 준비물</option>
-                </select>
-                <button onclick="loadFromGAS()">불러오기</button>
-                <button onclick="saveToGAS()" style="background-color: #55ff55;">저장하기</button>
+                <div id="categorySelectContainer" class="custom-select-container" style="flex: 1; min-width: 120px;"></div>
+                <div id="itemSelectContainer" class="custom-select-container" style="flex: 2; min-width: 180px;"></div>
+                <button onclick="appendNotice()" style="margin-left:auto; padding: 10px 15px;">➕ 덧붙이기</button>
+                <button class="btn-clear" onclick="clearNotice()" title="초기화" style="padding: 10px 15px;">초기화</button>
             </div>
         </div>
 
         <div class="section checklist-section">
-            <h2>🎒 하교 전 확인했나요?</h2>
-            
+            <h2>✅ 확인했나요?</h2>
             <div class="add-checklist">
-                <input type="text" id="newCheckInput" placeholder="오늘의 특별 퀘스트 입력 (예: 미술 작품 챙기기)" onkeypress="if(event.key==='Enter') addCheckItem()">
+                <input type="text" id="newCheckInput" placeholder="오늘의 퀘스트 입력" onkeypress="if(event.key==='Enter') addCheckItem()">
                 <button onclick="addCheckItem()">➕ 추가</button>
             </div>
-
             <div class="checklist-items" id="checklistContainer">
-                <div class="check-item" onclick="toggleCheck(this)">
-                    <div class="check-box"></div><span>미니 빗자루로 책상 아래 쓸기</span>
-                </div>
-                <div class="check-item" onclick="toggleCheck(this)">
-                    <div class="check-box"></div><span>책상 서랍 정돈하기</span>
-                </div>
-                <div class="check-item" onclick="toggleCheck(this)">
-                    <div class="check-box"></div><span>교과서 사물함에 세워서 꽂아두기</span>
-                </div>
-                
-                <div class="check-item fixed-end" onclick="toggleCheck(this)" id="finalCheckItem">
-                    <div class="check-box"></div><span>모두 완료한 사람은 선생님께 인사 드리고 하교하기!</span>
+                <div class="check-item fixed-end" id="finalCheckItem">
+                    <span onclick="enterEditMode(this)" onblur="exitEditMode(this)" onkeydown="preventEnter(event)" spellcheck="false" contenteditable="false">모두 완료한 사람은<br>선생님께 인사 드리고 하교하기!</span>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 1. 날짜 자동 갱신 (한국 시간 기준)
-        function updateDate() {
-            const now = new Date();
-            const options = { timeZone: 'Asia/Seoul', year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
-            const formatter = new Intl.DateTimeFormat('ko-KR', options);
-            document.getElementById('dateDisplay').innerText = formatter.format(now);
-        }
-        updateDate(); // 실행
-
-        // 2. 화면 모드 변경
-        function setViewMode(mode) {
-            const container = document.getElementById('mainContainer');
-            container.className = 'container'; // 클래스 초기화
-            container.classList.add(mode + '-mode');
-        }
-
-        // 3. 전체화면 토글
-        function toggleFullScreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    alert(`전체화면 모드를 켤 수 없습니다: ${err.message}`);
-                });
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
-            }
-        }
-
-        // 4. 체크리스트 추가 및 토글 기능
-        function toggleCheck(element) {
-            element.classList.toggle('completed');
-        }
-
-        function addCheckItem() {
-            const input = document.getElementById('newCheckInput');
-            const text = input.value.trim();
-            if (!text) return;
-
-            const container = document.getElementById('checklistContainer');
-            const finalItem = document.getElementById('finalCheckItem');
-            
-            // 새 항목 생성
-            const newItem = document.createElement('div');
-            newItem.className = 'check-item';
-            newItem.onclick = function() { toggleCheck(this); };
-            newItem.innerHTML = `<div class="check-box"></div><span>${text}</span>`;
-            
-            // 마지막 고정 항목 '앞에' 추가
-            container.insertBefore(newItem, finalItem);
-            input.value = ''; // 입력창 비우기
-        }
-
-        // 5. GAS 연동 함수 (현재는 콘솔 로그 및 알림만 띄우는 가짜 로직)
-        // 실제 사용 시 구글 앱스 스크립트 웹앱 URL을 입력해야 합니다.
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbwgfSOBttYyvOTPNm8AWwnwn4rL2M33Q07_cVRcIHLQsEZROx88RAGqGdwWL5rO_GlQ/exec"; 
-
-        function loadFromGAS() {
-            const category = document.getElementById('categorySelect').value;
-            // 💡 추후 GAS와 실제 연결 시 fetch()를 사용하게 됩니다.
-            // 지금은 임시 텍스트를 넣어줄게요!
-            alert(`[${category}] 템플릿을 구글 시트에서 불러옵니다! (현재는 시뮬레이션입니다)`);
-            
-            let tempText = "";
-            if(category === "안전") tempText = "1. 길을 건널 때 좌우 살피기\n2. 낯선 사람 따라가지 않기";
-            if(category === "안내장") tempText = "1. 급식 식단표 부모님께 전달하기\n2. 방과후 학교 신청서 내일까지!";
-            if(category === "준비물") tempText = "1. 미술 시간: 크레파스, 가위, 풀\n2. 실내화 세탁해 오기";
-
-            document.getElementById('noticeText').value = tempText;
-        }
-
-        function saveToGAS() {
-            const category = document.getElementById('categorySelect').value;
-            const content = document.getElementById('noticeText').value;
-            alert(`[${category}] 내용이 구글 시트에 저장되었습니다!\n\n저장된 내용:\n${content}`);
-            // 💡 실제 구현 시: fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ category, content }) })
-        }
+        const _0x52c961=_0x15d3;(function(_0xb56364,_0x3b3ed5){const _0x430a02=_0x15d3,_0x5d4b37=_0xb56364();while(!![]){try{const _0x41e7d0=parseInt(_0x430a02(0x1a5))/0x1+-parseInt(_0x430a02(0x187))/0x2+-parseInt(_0x430a02(0x199))/0x3+parseInt(_0x430a02(0x17a))/0x4+-parseInt(_0x430a02(0x1d2))/0x5*(parseInt(_0x430a02(0x1e3))/0x6)+parseInt(_0x430a02(0x195))/0x7*(-parseInt(_0x430a02(0x159))/0x8)+-parseInt(_0x430a02(0x158))/0x9*(-parseInt(_0x430a02(0x17d))/0xa);if(_0x41e7d0===_0x3b3ed5)break;else _0x5d4b37['push'](_0x5d4b37['shift']());}catch(_0x4bb6a9){_0x5d4b37['push'](_0x5d4b37['shift']());}}}(_0x58b2,0x2b4b5));function generatePixelPattern(_0x1cbf3e,_0x2ece14,_0x299203){const _0x4b162d=_0x15d3,_0xc2c705=document[_0x4b162d(0x1a4)](_0x4b162d(0x18b));_0xc2c705['width']=_0x299203,_0xc2c705[_0x4b162d(0x1b6)]=_0x299203;const _0x39d21d=_0xc2c705[_0x4b162d(0x1df)]('2d');for(let _0x1a0daa=0x0;_0x1a0daa<_0x299203;_0x1a0daa+=_0x2ece14){for(let _0x28ee92=0x0;_0x28ee92<_0x299203;_0x28ee92+=_0x2ece14){_0x39d21d['fillStyle']=_0x1cbf3e[Math[_0x4b162d(0x1d8)](Math[_0x4b162d(0x176)]()*_0x1cbf3e[_0x4b162d(0x191)])],_0x39d21d[_0x4b162d(0x19d)](_0x28ee92,_0x1a0daa,_0x2ece14,_0x2ece14);}}return _0xc2c705[_0x4b162d(0x192)]();}function generateGrassOverhangPattern(_0x532039,_0xb9750b,_0x5836f0,_0x5132e9){const _0x20c7ef=_0x15d3,_0x4cad41=document[_0x20c7ef(0x1a4)](_0x20c7ef(0x18b));_0x4cad41[_0x20c7ef(0x16f)]=_0x5836f0,_0x4cad41[_0x20c7ef(0x1b6)]=_0x5132e9;const _0x4d3212=_0x4cad41[_0x20c7ef(0x1df)]('2d');for(let _0x23ff0a=0x0;_0x23ff0a<_0x5836f0;_0x23ff0a+=_0xb9750b){let _0x19b72b=(0x4+Math[_0x20c7ef(0x1d8)](Math[_0x20c7ef(0x176)]()*0x5))*_0xb9750b;for(let _0x1c0760=0x0;_0x1c0760<_0x19b72b;_0x1c0760+=_0xb9750b){_0x4d3212[_0x20c7ef(0x1bb)]=_0x532039[Math[_0x20c7ef(0x1d8)](Math['random']()*_0x532039[_0x20c7ef(0x191)])],_0x4d3212['fillRect'](_0x23ff0a,_0x1c0760,_0xb9750b,_0xb9750b),_0x1c0760===_0x19b72b-_0xb9750b&&(_0x4d3212[_0x20c7ef(0x1bb)]=_0x20c7ef(0x1ee),_0x4d3212[_0x20c7ef(0x19d)](_0x23ff0a,_0x1c0760,_0xb9750b,_0xb9750b));}}return _0x4cad41[_0x20c7ef(0x192)]();}function applyMinecraftBackground(){const _0xf1a971=_0x15d3,_0x89193d=[_0xf1a971(0x1aa),_0xf1a971(0x1a7),_0xf1a971(0x1e4),_0xf1a971(0x1c1),_0xf1a971(0x1ad),_0xf1a971(0x174)],_0x54857a=[_0xf1a971(0x1d5),_0xf1a971(0x1f2),'#7a4d2b','#8b5a32',_0xf1a971(0x17b),_0xf1a971(0x188)];document['body'][_0xf1a971(0x1fc)][_0xf1a971(0x165)]=_0xf1a971(0x1c7)+generatePixelPattern(_0x54857a,0xa,0x190)+')',document[_0xf1a971(0x171)]('.grass-top')[_0xf1a971(0x1fc)][_0xf1a971(0x165)]='url('+generateGrassOverhangPattern(_0x89193d,0xa,0x190,0x64)+')';}applyMinecraftBackground();function updateDate(){const _0x83d8f9=_0x15d3,_0x2367a0={'timeZone':_0x83d8f9(0x190),'year':_0x83d8f9(0x157),'month':'long','day':_0x83d8f9(0x157),'weekday':'long'};document['getElementById'](_0x83d8f9(0x200))[_0x83d8f9(0x1ff)]=new Intl[(_0x83d8f9(0x1f8))](_0x83d8f9(0x1b1),_0x2367a0)[_0x83d8f9(0x1f1)](new Date());}updateDate();function setViewMode(_0x4016ac){const _0x26d913=_0x15d3;document['getElementById']('mainContainer')[_0x26d913(0x19b)]=_0x26d913(0x163)+_0x4016ac+_0x26d913(0x16e);}const fullscreenBtn=document[_0x52c961(0x1ca)]('fullscreenBtn');function toggleFullScreen(){const _0x5114d0=_0x52c961;if(!document[_0x5114d0(0x1ed)])document['documentElement'][_0x5114d0(0x173)]();else document[_0x5114d0(0x196)]();}document[_0x52c961(0x1fb)]('fullscreenchange',()=>{const _0x1d3490=_0x52c961;fullscreenBtn[_0x1d3490(0x1ff)]=document[_0x1d3490(0x1ed)]?_0x1d3490(0x1d3):_0x1d3490(0x1e9);});function changeFontSize(_0x3fbafc){const _0x10d66a=_0x52c961;let _0x524d45=parseInt(getComputedStyle(document[_0x10d66a(0x1cf)])['getPropertyValue']('--content-font-size'))||0x19;_0x524d45=Math[_0x10d66a(0x19a)](0xe,Math[_0x10d66a(0x1ae)](0x2d,_0x524d45+_0x3fbafc)),document[_0x10d66a(0x1cf)]['style'][_0x10d66a(0x1e1)](_0x10d66a(0x1c8),_0x524d45+'px'),saveToLocal();}let modalOkCallback=null;function openModal(_0xa583de,_0x38f58c,_0x3826da,_0x4c5dc2){const _0x30f24e=_0x52c961;document[_0x30f24e(0x1ca)]('customModal')[_0x30f24e(0x1fc)][_0x30f24e(0x1a8)]=_0x30f24e(0x186),document[_0x30f24e(0x1ca)](_0x30f24e(0x19c))[_0x30f24e(0x1ff)]=_0x38f58c,document['getElementById'](_0x30f24e(0x16c))[_0x30f24e(0x1ff)]=_0x3826da;const _0x3be35e=document['getElementById'](_0x30f24e(0x1da));_0x3be35e['style'][_0x30f24e(0x1a8)]=_0xa583de==='prompt'?_0x30f24e(0x15a):_0x30f24e(0x1fd),_0x3be35e[_0x30f24e(0x18c)]='';if(_0xa583de===_0x30f24e(0x1a6))setTimeout(()=>_0x3be35e[_0x30f24e(0x1ac)](),0x32);modalOkCallback=()=>{const _0x3e2ea3=_0x30f24e;_0x4c5dc2(_0x3be35e['value'][_0x3e2ea3(0x1b2)]()),closeModal();};}function closeModal(){const _0x13b931=_0x52c961;document['getElementById'](_0x13b931(0x1a1))[_0x13b931(0x1fc)][_0x13b931(0x1a8)]=_0x13b931(0x1fd);}document[_0x52c961(0x1ca)](_0x52c961(0x1c2))[_0x52c961(0x15f)]=()=>modalOkCallback&&modalOkCallback(),document['getElementById'](_0x52c961(0x19e))[_0x52c961(0x15f)]=closeModal;let templateData={'안전':[_0x52c961(0x18d)],'안내장':[_0x52c961(0x167)],'준비물':[_0x52c961(0x1b7)]},currentCategory='안전',currentItem='',lastCursorPosition=null;function saveToLocal(){const _0x54394d=_0x52c961,_0x2d33d8={'notice':document[_0x54394d(0x1ca)](_0x54394d(0x1e2))[_0x54394d(0x18c)],'checklist':[...document[_0x54394d(0x1bc)](_0x54394d(0x189))][_0x54394d(0x1e8)](_0x384ecf=>({'text':_0x384ecf[_0x54394d(0x171)](_0x54394d(0x201))[_0x54394d(0x1ff)][_0x54394d(0x1b2)](),'completed':_0x384ecf[_0x54394d(0x1bd)][_0x54394d(0x1ef)](_0x54394d(0x198))})),'templates':templateData,'finalMessage':document[_0x54394d(0x171)](_0x54394d(0x19f))[_0x54394d(0x180)],'fontSize':getComputedStyle(document['documentElement'])[_0x54394d(0x1d9)](_0x54394d(0x1c8))};localStorage[_0x54394d(0x172)]('classQuestData',JSON[_0x54394d(0x15c)](_0x2d33d8));}function renderCustomSelect(_0x1e71ed,_0x397fc8,_0xa5ebc6,_0x477a0c){const _0x5ed12f=_0x52c961,_0x32dd34=document[_0x5ed12f(0x1ca)](_0x1e71ed);_0x32dd34[_0x5ed12f(0x180)]='';const _0x10a49a=document[_0x5ed12f(0x1a4)](_0x5ed12f(0x1b4));_0x10a49a[_0x5ed12f(0x19b)]=_0x5ed12f(0x1af);const _0x361624=document[_0x5ed12f(0x1a4)]('span');_0x361624['className']=_0x5ed12f(0x1de),_0x361624[_0x5ed12f(0x193)]=_0xa5ebc6||'선택',_0x10a49a['appendChild'](_0x361624);const _0x53fc7c=document[_0x5ed12f(0x1a4)](_0x5ed12f(0x1b4));_0x53fc7c[_0x5ed12f(0x19b)]=_0x5ed12f(0x1fa),_0x397fc8[_0x5ed12f(0x17e)](_0x4e7d88=>{const _0x3cb961=_0x5ed12f,_0x4c8ed5=document[_0x3cb961(0x1a4)](_0x3cb961(0x1b4));_0x4c8ed5[_0x3cb961(0x19b)]=_0x3cb961(0x168),_0x4c8ed5['innerHTML']='<span>'+_0x4e7d88+_0x3cb961(0x183),_0x4c8ed5[_0x3cb961(0x17c)]=_0x236a22=>{const _0x21198f=_0x3cb961;_0x236a22[_0x21198f(0x1ab)](),_0x477a0c==='category'?(currentCategory=_0x4e7d88,currentItem=templateData[_0x4e7d88][0x0]||''):currentItem=_0x4e7d88,updateAllSelects(),_0x32dd34[_0x21198f(0x1bd)]['remove'](_0x21198f(0x15e));};const _0x380aac=document[_0x3cb961(0x1a4)](_0x3cb961(0x1c4));_0x380aac['className']=_0x3cb961(0x1a2),_0x380aac[_0x3cb961(0x193)]='✖',_0x380aac[_0x3cb961(0x17c)]=_0x190bab=>{const _0x5b40b3=_0x3cb961;_0x190bab['stopPropagation'](),_0x190bab[_0x5b40b3(0x1ab)]();if(_0x477a0c===_0x5b40b3(0x1d7))deleteCategory(_0x4e7d88);else deleteTemplateItem(currentCategory,_0x4e7d88);},_0x4c8ed5['appendChild'](_0x380aac),_0x53fc7c[_0x3cb961(0x1b9)](_0x4c8ed5);});const _0x1fac95=document['createElement'](_0x5ed12f(0x1b4));_0x1fac95['className']=_0x5ed12f(0x181),_0x1fac95[_0x5ed12f(0x193)]=_0x5ed12f(0x185),_0x1fac95[_0x5ed12f(0x17c)]=_0x6eac28=>{_0x6eac28['preventDefault']();if(_0x477a0c==='category')addNewCategory();else addNewItem(currentCategory);},_0x53fc7c[_0x5ed12f(0x1b9)](_0x1fac95),_0x10a49a['onclick']=_0x437d87=>{const _0x508e6d=_0x5ed12f;_0x437d87[_0x508e6d(0x1f7)](),document[_0x508e6d(0x1bc)]('.custom-select-container')[_0x508e6d(0x17e)](_0x2044a5=>_0x2044a5!==_0x32dd34&&_0x2044a5[_0x508e6d(0x1bd)][_0x508e6d(0x197)](_0x508e6d(0x15e))),_0x32dd34[_0x508e6d(0x1bd)]['toggle'](_0x508e6d(0x15e));},_0x32dd34[_0x5ed12f(0x1b9)](_0x10a49a),_0x32dd34[_0x5ed12f(0x1b9)](_0x53fc7c);}document[_0x52c961(0x1fb)](_0x52c961(0x16d),_0x4f8b66=>{const _0xb31e0f=_0x52c961;!_0x4f8b66[_0xb31e0f(0x1ea)][_0xb31e0f(0x1bf)](_0xb31e0f(0x162))&&document[_0xb31e0f(0x1bc)]('.custom-select-container')[_0xb31e0f(0x17e)](_0x2e7d7e=>_0x2e7d7e[_0xb31e0f(0x1bd)][_0xb31e0f(0x197)](_0xb31e0f(0x15e)));});function updateAllSelects(){const _0x4a6826=_0x52c961,_0x3f6feb=Object[_0x4a6826(0x1a3)](templateData);if(!currentCategory||!_0x3f6feb[_0x4a6826(0x1c5)](currentCategory))currentCategory=_0x3f6feb[0x0]||'';renderCustomSelect(_0x4a6826(0x164),_0x3f6feb,currentCategory,_0x4a6826(0x1d7));const _0xbfdb5=templateData[currentCategory]||[];if(!currentItem||!_0xbfdb5['includes'](currentItem))currentItem=_0xbfdb5[0x0]||'';renderCustomSelect(_0x4a6826(0x1e0),_0xbfdb5,currentItem,_0x4a6826(0x15d));}function addNewCategory(){const _0x228be9=_0x52c961;openModal(_0x228be9(0x1a6),_0x228be9(0x1d0),_0x228be9(0x1dd),_0x14f122=>{_0x14f122&&!templateData[_0x14f122]&&(templateData[_0x14f122]=[],currentCategory=_0x14f122,updateAllSelects(),saveToLocal());});}function addNewItem(_0xb7697){const _0x32f259=_0x52c961;openModal(_0x32f259(0x1a6),_0x32f259(0x194),'내용\x20입력하기',_0x59f6ab=>{const _0x58df3c=_0x32f259;_0x59f6ab&&!templateData[_0xb7697][_0x58df3c(0x1c5)](_0x59f6ab)&&(templateData[_0xb7697]['push'](_0x59f6ab),currentItem=_0x59f6ab,updateAllSelects(),saveToLocal());});}function _0x58b2(){const _0x482200=['getSelection','closest','nextSibling','#78c244','modalOkBtn','classQuestData','button','includes','blur','url(','--content-font-size','fontSize','getElementById','draggable','insertBefore','.check-item:not(.fixed-end)','notice','documentElement','새\x20카테고리','finalMessage','385bkySoT','🖥️\x20일반화면','초기화','#5c3a21',']의\x20모든\x20내용이\x20삭제됩니다.','category','floor','getPropertyValue','modalInput','parentNode','filter','내용\x20입력하기','custom-select-header-text','getContext','itemSelectContainer','setProperty','noticeText','888RLDJNc','#70b23f','templates','true','contentEditable','map','🖥️\x20전체화면','target','newCheckInput','endsWith','fullscreenElement','rgba(0,\x200,\x200,\x200.25)','contains','미니\x20빗자루로\x20책상\x20아래\x20쓸기','format','#6b4426','onblur','element','mouseup','shiftKey','stopPropagation','DateTimeFormat','checklist','custom-select-list','addEventListener','style','none','top','innerText','dateDisplay','span','numeric','27EBvuJt','824HNnfzk','block','check-item','stringify','item','open','onclick','책상\x20서랍\x20정리하기','checklistContainer','.custom-select-container','container\x20','categorySelectContainer','backgroundImage','clientY','안내장\x20부모님께\x20전달하기','custom-select-item','startsWith','toggle','<div\x20class=\x22check-box\x22\x20onclick=\x22toggleCheck(this)\x22></div><span\x20onclick=\x22enterEditMode(this)\x22\x20onblur=\x22exitEditMode(this)\x22\x20onkeydown=\x22preventEnter(event)\x22\x20spellcheck=\x22false\x22>','modalDesc','mousedown','-mode','width','finalCheckItem','querySelector','setItem','requestFullscreen','#527a2c','confirm','random','\x20completed','text','Enter','451028HXlLBL','#9c6538','onmousedown','1651330QzByGP','forEach','key','innerHTML','custom-add-btn','reduce','</span>','selectionEnd','➕\x20추가...','flex','527106ELsSMF','#ad703e','#checklistContainer\x20.check-item:not(.fixed-end)','split','canvas','value','길을\x20건널\x20때\x20좌우\x20살피기','교과서\x20사물함에\x20세워서\x20꽂아두기','match','Asia/Seoul','length','toDataURL','textContent','새\x20항목','5180myKJob','exitFullscreen','remove','completed','402843gihOfL','max','className','modalTitle','fillRect','modalCancelBtn','#finalCheckItem\x20span','getItem','customModal','custom-del-btn','keys','createElement','54627ruwAJX','prompt','#6ba038','display','parentElement','#5b8731','preventDefault','focus','#82d14b','min','custom-select-header','selectionStart','ko-KR','trim','내용을\x20전부\x20지울까요?','div','</span><button\x20class=\x22delete-btn\x22\x20onclick=\x22deleteItem(this)\x22>✖</button>','height','월요일\x20실내화','false','appendChild','parse','fillStyle','querySelectorAll','classList'];_0x58b2=function(){return _0x482200;};return _0x58b2();}function deleteCategory(_0xa50951){const _0x554ebe=_0x52c961;openModal(_0x554ebe(0x175),'경고','['+_0xa50951+_0x554ebe(0x1d6),()=>{delete templateData[_0xa50951],currentCategory='',updateAllSelects(),saveToLocal();});}function deleteTemplateItem(_0x22918a,_0x2395e7){templateData[_0x22918a]=templateData[_0x22918a]['filter'](_0x2f3633=>_0x2f3633!==_0x2395e7),updateAllSelects(),saveToLocal();}const noticeArea=document[_0x52c961(0x1ca)](_0x52c961(0x1e2));function renumberNoticeText(){const _0x49cfde=_0x52c961;let _0x190c39=noticeArea[_0x49cfde(0x18c)][_0x49cfde(0x18a)]('\x0a'),_0x5bdc3c=0x1;noticeArea[_0x49cfde(0x18c)]=_0x190c39[_0x49cfde(0x1e8)](_0x5df53b=>{const _0x45fad7=_0x49cfde,_0xba5aeb=_0x5df53b[_0x45fad7(0x18f)](/^\s*\d+\.\s*(.*)/);return _0xba5aeb?_0x5bdc3c++ +'.\x20'+_0xba5aeb[0x1][_0x45fad7(0x1b2)]():_0x5df53b;})['join']('\x0a');}noticeArea['addEventListener'](_0x52c961(0x1f5),()=>{const _0x572367=_0x52c961;lastCursorPosition=noticeArea[_0x572367(0x1b0)],noticeArea['selectionStart']===noticeArea[_0x572367(0x184)]&&(renumberNoticeText(),saveToLocal());}),noticeArea[_0x52c961(0x1f3)]=()=>{renumberNoticeText(),saveToLocal();};function appendNotice(){const _0x84fd11=_0x52c961;if(!currentItem)return;let _0x44974f=noticeArea[_0x84fd11(0x18c)];const _0x19ea65='1.\x20'+currentItem;if(lastCursorPosition!==null){let _0xbca60c=_0x44974f['substring'](0x0,lastCursorPosition),_0x129e06=_0x44974f['substring'](lastCursorPosition);const _0x147fdd=_0xbca60c[_0x84fd11(0x191)]>0x0&&!_0xbca60c[_0x84fd11(0x1ec)]('\x0a')?'\x0a':'',_0x470455=_0x129e06[_0x84fd11(0x191)]>0x0&&!_0x129e06[_0x84fd11(0x169)]('\x0a')?'\x0a':'';noticeArea[_0x84fd11(0x18c)]=_0xbca60c+_0x147fdd+_0x19ea65+_0x470455+_0x129e06;}else noticeArea[_0x84fd11(0x18c)]+=(_0x44974f[_0x84fd11(0x191)]>0x0&&!_0x44974f['endsWith']('\x0a')?'\x0a':'')+_0x19ea65;renumberNoticeText(),saveToLocal(),noticeArea[_0x84fd11(0x1ac)]();}function clearNotice(){const _0xf82181=_0x52c961;openModal('confirm',_0xf82181(0x1d4),_0xf82181(0x1b3),()=>{noticeArea['value']='',saveToLocal();});}function enterEditMode(_0x2dc965){const _0x16fba4=_0x52c961;_0x2dc965[_0x16fba4(0x1e7)]=_0x16fba4(0x1e6),_0x2dc965[_0x16fba4(0x1ac)]();}function exitEditMode(_0x848ad2){const _0x1a1c14=_0x52c961;_0x848ad2[_0x1a1c14(0x1e7)]=_0x1a1c14(0x1b8),window[_0x1a1c14(0x1be)]()['removeAllRanges'](),saveToLocal();}function preventEnter(_0x28fbc9){const _0x277ae0=_0x52c961;_0x28fbc9[_0x277ae0(0x17f)]===_0x277ae0(0x179)&&!_0x28fbc9[_0x277ae0(0x1f6)]&&(_0x28fbc9['preventDefault'](),_0x28fbc9['target'][_0x277ae0(0x1c6)]());}function toggleCheck(_0xa2a94a){const _0xc6f306=_0x52c961;_0xa2a94a[_0xc6f306(0x1a9)][_0xc6f306(0x1bd)][_0xc6f306(0x16a)](_0xc6f306(0x198)),saveToLocal();}function deleteItem(_0x802f2a){const _0x268bcb=_0x52c961;_0x802f2a['parentElement'][_0x268bcb(0x197)](),saveToLocal();}function _0x15d3(_0x47a122,_0x2013aa){_0x47a122=_0x47a122-0x157;const _0x58b2ba=_0x58b2();let _0x15d32b=_0x58b2ba[_0x47a122];return _0x15d32b;}const checklist=document['getElementById'](_0x52c961(0x161)),placeholder=document[_0x52c961(0x1a4)]('div');placeholder[_0x52c961(0x19b)]='drag-placeholder';let dragged=null;function addDragEvents(_0x226b62){_0x226b62['ondragstart']=function(_0x4ef3b1){const _0x27bb0f=_0x15d3;if(this['querySelector'](_0x27bb0f(0x201))[_0x27bb0f(0x1e7)]===_0x27bb0f(0x1e6)){_0x4ef3b1['preventDefault']();return;}dragged=this,setTimeout(()=>{const _0x36d883=_0x27bb0f;this[_0x36d883(0x1fc)][_0x36d883(0x1a8)]=_0x36d883(0x1fd),this['parentNode']['insertBefore'](placeholder,this[_0x36d883(0x1c0)]);},0x0);},_0x226b62['ondragend']=function(){const _0x18e3d1=_0x15d3;dragged&&(dragged[_0x18e3d1(0x1fc)][_0x18e3d1(0x1a8)]=_0x18e3d1(0x186),placeholder[_0x18e3d1(0x1db)][_0x18e3d1(0x1cc)](dragged,placeholder),dragged=null),placeholder[_0x18e3d1(0x197)](),saveToLocal();};}checklist['ondragover']=function(_0x42153f){const _0x1758d9=_0x52c961;_0x42153f['preventDefault']();if(!dragged)return;const _0x1c4332=getAfter(this,_0x42153f[_0x1758d9(0x166)]);if(!_0x1c4332)this['insertBefore'](placeholder,document[_0x1758d9(0x1ca)](_0x1758d9(0x170)));else this[_0x1758d9(0x1cc)](placeholder,_0x1c4332);};function getAfter(_0x1c7680,_0x2573cb){const _0x53077a=_0x52c961,_0x196951=[..._0x1c7680[_0x53077a(0x1bc)](_0x53077a(0x1cd))][_0x53077a(0x1dc)](_0x1e369a=>_0x1e369a!==dragged&&_0x1e369a!==placeholder);return _0x196951[_0x53077a(0x182)]((_0x49178f,_0x313571)=>{const _0x13121b=_0x53077a,_0x4f487c=_0x313571['getBoundingClientRect'](),_0x2fc3a9=_0x2573cb-_0x4f487c[_0x13121b(0x1fe)]-_0x4f487c['height']/0x2;if(_0x2fc3a9<0x0&&_0x2fc3a9>_0x49178f['offset'])return{'offset':_0x2fc3a9,'element':_0x313571};else return _0x49178f;},{'offset':Number['NEGATIVE_INFINITY']})[_0x53077a(0x1f4)];}function addCheckItem(_0x1c96dd=null,_0x5385f7=![]){const _0x4fa689=_0x52c961,_0x14ac2c=document[_0x4fa689(0x1ca)](_0x4fa689(0x1eb)),_0x1242f5=_0x1c96dd||_0x14ac2c[_0x4fa689(0x18c)]['trim']();if(!_0x1242f5)return;const _0x310452=document['createElement'](_0x4fa689(0x1b4));_0x310452[_0x4fa689(0x19b)]=_0x4fa689(0x15b)+(_0x5385f7?_0x4fa689(0x177):''),_0x310452[_0x4fa689(0x1cb)]=!![],_0x310452[_0x4fa689(0x180)]=_0x4fa689(0x16b)+_0x1242f5+_0x4fa689(0x1b5),addDragEvents(_0x310452),checklist[_0x4fa689(0x1cc)](_0x310452,document[_0x4fa689(0x1ca)](_0x4fa689(0x170))),!_0x1c96dd&&(_0x14ac2c[_0x4fa689(0x18c)]='',saveToLocal());}function loadFromLocal(){const _0xaeac2=_0x52c961,_0x82ce61=localStorage[_0xaeac2(0x1a0)](_0xaeac2(0x1c3));if(_0x82ce61){const _0x3f8978=JSON[_0xaeac2(0x1ba)](_0x82ce61);if(_0x3f8978[_0xaeac2(0x1e5)])templateData=_0x3f8978[_0xaeac2(0x1e5)];if(_0x3f8978[_0xaeac2(0x1d1)])document[_0xaeac2(0x171)](_0xaeac2(0x19f))[_0xaeac2(0x180)]=_0x3f8978[_0xaeac2(0x1d1)];_0x3f8978[_0xaeac2(0x1c9)]&&document[_0xaeac2(0x1cf)][_0xaeac2(0x1fc)][_0xaeac2(0x1e1)](_0xaeac2(0x1c8),_0x3f8978[_0xaeac2(0x1c9)]),noticeArea[_0xaeac2(0x18c)]=_0x3f8978[_0xaeac2(0x1ce)]||'',_0x3f8978[_0xaeac2(0x1f9)]&&_0x3f8978['checklist'][_0xaeac2(0x191)]>0x0?_0x3f8978[_0xaeac2(0x1f9)][_0xaeac2(0x17e)](_0x3c7da7=>addCheckItem(_0x3c7da7[_0xaeac2(0x178)],_0x3c7da7['completed'])):defCheck();}else defCheck();updateAllSelects();}function defCheck(){const _0x556ce9=_0x52c961;addCheckItem(_0x556ce9(0x1f0)),addCheckItem(_0x556ce9(0x160)),addCheckItem(_0x556ce9(0x18e));}loadFromLocal();
     </script>
 </body>
 </html>
