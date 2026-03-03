@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>👾 우리반 하교 퀘스트</title>
     <style>
-        /* 1. 폰트 설정 */
         @font-face {
             font-family: 'NeoDunggeunGothicPro';
             src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/NeoDunggeunmoPro-Regular.woff2') format('woff2');
@@ -22,7 +21,6 @@
             font-family: 'NeoDunggeunGothicPro', sans-serif;
         }
 
-        /* 2. 배경 및 레이아웃 */
         body {
             background-color: #8b5a2b; 
             margin: 0;
@@ -41,7 +39,6 @@
             z-index: -1;
         }
 
-        /* 3. 컨트롤 패널 */
         .controls {
             display: flex;
             justify-content: center;
@@ -102,9 +99,8 @@
 h2 {
             text-align: center; margin: 0 0 10px 0; padding-bottom: 10px;
             border-bottom: 3px solid #ccc; color: #222;
-            font-size: 30px; /* 💡 기존 calc(...) 부분을 지우고 30px로 크기를 고정했어요! */
+            font-size: 30px;
             white-space: nowrap; 
-            /* 🐛 transition 속성은 크기가 변할 때 부드럽게 해주는 역할이라, 이제 지워주셔도 됩니다. */
         }
 
         .date-display {
@@ -118,7 +114,6 @@ h2 {
             transition: font-size 0.2s ease; min-height: 0; 
         }
 
-        /* 드롭박스 스타일 */
         .admin-controls {
             margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px;
             align-items: stretch; background: #e9e9e9; padding: 10px; border: 3px solid #888;
@@ -169,7 +164,6 @@ h2 {
 
         .btn-clear { background-color: #ffaaaa; color: #cc0000; font-weight: bold; }
 
-        /* 체크리스트 스타일 */
         .checklist-items { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0; }
 
         .check-item {
@@ -211,7 +205,6 @@ h2 {
 
         .drag-placeholder { height: 6px; background-color: #888888; border-radius: 3px; margin: 2px 0; pointer-events: none; }
 
-        /* 모달 스타일 */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 5000; }
         .modal-box { background: #f9f9f9; border: 5px solid #333; box-shadow: 6px 6px 0px rgba(0,0,0,0.5); padding: 20px; width: 400px; max-width: 90%; text-align: center; }
         .modal-box h3 { margin-top: 0; font-size: 1.5rem; border-bottom: 3px dashed #ccc; padding-bottom: 10px; }
@@ -239,13 +232,14 @@ h2 {
 
     <div class="grass-top"></div>
 
-    <div class="controls">
+<div class="controls">
         <button onclick="setViewMode('split')">📖 둘 다 보기</button>
         <button onclick="setViewMode('notice')">📝 알림장</button>
         <button onclick="setViewMode('checklist')">✅ 체크리스트</button>
         <button id="fullscreenBtn" class="btn-fullscreen" onclick="toggleFullScreen()">🖥️ 전체화면</button>
         <button class="btn-font" onclick="changeFontSize(-2)">-가</button>
         <button class="btn-font" onclick="changeFontSize(2)">+가</button>
+        <button onclick="toggleBackground()" style="background-color: #ffb6c1;">🎨</button>
     </div>
 
     <div class="container split-mode" id="mainContainer">
@@ -276,7 +270,6 @@ h2 {
     </div>
 
     <script>
-        // 배경 및 공통 함수들 생략 없이 유지...
         function generatePixelPattern(colors, pixelSize, size) {
             const canvas = document.createElement('canvas'); canvas.width = size; canvas.height = size;
             const ctx = canvas.getContext('2d');
@@ -303,13 +296,90 @@ h2 {
             return canvas.toDataURL();
         }
 
-        function applyMinecraftBackground() {
-            const greenShades = ['#5b8731', '#6ba038', '#70b23f', '#78c244', '#82d14b', '#527a2c'];
-            const brownShades = ['#5c3a21', '#6b4426', '#7a4d2b', '#8b5a32', '#9c6538', '#ad703e'];
-            document.body.style.backgroundImage = `url(${generatePixelPattern(brownShades, 10, 400)})`;
-            document.querySelector('.grass-top').style.backgroundImage = `url(${generateGrassOverhangPattern(greenShades, 10, 400, 100)})`;
+        function generateWaterPattern(pixelSize, height) {
+            const width = 800;
+            const canvas = document.createElement('canvas'); 
+            canvas.width = width; canvas.height = height;
+            const ctx = canvas.getContext('2d');
+
+            const oceanColors = [
+                '#ffffff', '#e1f5fe', '#b3e5fc', '#81d4fa',
+                '#4fc3f7', '#29b6f6', '#03a9f4', '#039be5',
+                '#0288d1', '#0277bd', '#01579b', '#003c8f',
+                '#002171', '#00154a', '#000a24' 
+            ];
+
+            for (let y = 0; y < height; y += pixelSize) {
+                let ratio = y / height;
+                let baseIndex = Math.floor(ratio * oceanColors.length);
+
+                for (let x = 0; x < width; x += pixelSize) {
+
+                    let offset = Math.floor(Math.random() * 5) - 2; 
+                    let finalIndex = Math.max(0, Math.min(oceanColors.length - 1, baseIndex + offset));
+                    
+                    ctx.fillStyle = oceanColors[finalIndex];
+                    ctx.fillRect(x, y, pixelSize, pixelSize);
+                }
+            }
+            return canvas.toDataURL();
         }
-        applyMinecraftBackground();
+
+        function generateBeachWavePattern(pixelSize, width, height) {
+            const canvas = document.createElement('canvas'); 
+            canvas.width = width; canvas.height = height;
+            const ctx = canvas.getContext('2d');
+
+            const sandColors = ['#f4d499', '#e8c382', '#e0b876', '#dcb46e', '#d1a75c'];
+            const foamColor = '#ffffff'; 
+
+            for (let x = 0; x < width; x += pixelSize) {
+                let waveOffset = Math.sin(x * (Math.PI * 2 / 400)) * 20; 
+
+                let limit = Math.floor((50 + waveOffset) / pixelSize) * pixelSize;
+
+                for (let y = 0; y < limit; y += pixelSize) {
+                    if (y === limit - pixelSize) {
+                        ctx.fillStyle = foamColor; 
+                    } else {
+                        ctx.fillStyle = sandColors[Math.floor(Math.random() * sandColors.length)];
+                    }
+                    ctx.fillRect(x, y, pixelSize, pixelSize);
+                }
+            }
+            return canvas.toDataURL();
+        }
+
+        let currentBgTheme = 'dirt'; 
+
+        function applyBackgroundTheme(theme) {
+            currentBgTheme = theme;
+            const grassTop = document.querySelector('.grass-top');
+
+            if (theme === 'dirt') {
+                const greenShades = ['#5b8731', '#6ba038', '#70b23f', '#78c244', '#82d14b', '#527a2c'];
+                const brownShades = ['#5c3a21', '#6b4426', '#7a4d2b', '#8b5a32', '#9c6538', '#ad703e'];
+                document.body.style.backgroundImage = `url(${generatePixelPattern(brownShades, 10, 400)})`;
+                document.body.style.backgroundRepeat = 'repeat';
+                document.body.style.backgroundAttachment = 'scroll';
+                
+                grassTop.style.display = 'block';
+                grassTop.style.backgroundImage = `url(${generateGrassOverhangPattern(greenShades, 10, 400, 100)})`;
+            } else if (theme === 'water') {
+                const screenHeight = Math.max(window.innerHeight, 1000); 
+                document.body.style.backgroundImage = `url(${generateWaterPattern(10, screenHeight)})`;
+                document.body.style.backgroundRepeat = 'repeat-x'; 
+                document.body.style.backgroundAttachment = 'fixed'; 
+
+                grassTop.style.display = 'block'; 
+                grassTop.style.backgroundImage = `url(${generateBeachWavePattern(10, 800, 100)})`;
+            }
+        }
+
+        function toggleBackground() {
+            applyBackgroundTheme(currentBgTheme === 'dirt' ? 'water' : 'dirt');
+            saveToLocal(); 
+        }
 
         function updateDate() {
             const options = { timeZone: 'Asia/Seoul', year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
@@ -328,12 +398,11 @@ h2 {
             fullscreenBtn.innerText = document.fullscreenElement ? "🖥️ 일반화면" : "🖥️ 전체화면";
         });
 
-        // 폰트 크기 변경 및 저장 로직 수정 😊
         function changeFontSize(step) {
             let currentFontSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--content-font-size')) || 25;
             currentFontSize = Math.max(20, Math.min(65, currentFontSize + step));
             document.documentElement.style.setProperty('--content-font-size', currentFontSize + 'px');
-            saveToLocal(); // 크기 변경 시 즉시 저장 ✨
+            saveToLocal(); 
         }
 
         let modalOkCallback = null;
@@ -354,7 +423,6 @@ h2 {
         let templateData = { "안전": ["길을 건널 때 좌우 살피기"], "안내장": ["안내장 부모님께 전달하기"], "준비물": ["월요일 실내화"] };
         let currentCategory = "안전"; let currentItem = ""; let lastCursorPosition = null;
 
-        // 저장 로직에 폰트 크기 추가 💡
         function saveToLocal() {
             const data = {
                 notice: document.getElementById('noticeText').value,
@@ -364,7 +432,8 @@ h2 {
                 })),
                 templates: templateData,
                 finalMessage: document.querySelector('#finalCheckItem span').innerHTML,
-                fontSize: getComputedStyle(document.documentElement).getPropertyValue('--content-font-size') // 폰트 크기 추가!
+                fontSize: getComputedStyle(document.documentElement).getPropertyValue('--content-font-size'), // 💡 여기에 쉼표(,) 추가!
+                bgTheme: currentBgTheme // 💡 currnetBgTheme -> currentBgTheme 오타 수정!
             };
             localStorage.setItem('classQuestData', JSON.stringify(data));
         }
@@ -483,15 +552,19 @@ h2 {
             if(!text) { input.value = ''; saveToLocal(); }
         }
 
-        // 불러오기 로직 수정: 폰트 크기 복구 로직 추가 🚀
         function loadFromLocal() {
             const saved = localStorage.getItem('classQuestData');
             if (saved) {
                 const data = JSON.parse(saved);
                 if (data.templates) templateData = data.templates;
                 if (data.finalMessage) document.querySelector('#finalCheckItem span').innerHTML = data.finalMessage;
-                
-                // 저장된 폰트 크기 적용 ✨
+
+                if (data.bgTheme) {
+                    applyBackgroundTheme(data.bgTheme);
+                } else {
+                    applyBackgroundTheme('dirt');
+                }
+
                 if (data.fontSize) {
                     document.documentElement.style.setProperty('--content-font-size', data.fontSize);
                 }
@@ -503,6 +576,7 @@ h2 {
                     defCheck();
                 }
             } else {
+                applyBackgroundTheme('dirt');
                 defCheck();
             }
             updateAllSelects();
