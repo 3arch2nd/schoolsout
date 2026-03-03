@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>👾 우리반 하교 퀘스트</title>
     <style>
+        /* 1. 폰트 설정 */
         @font-face {
             font-family: 'NeoDunggeunGothicPro';
             src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/NeoDunggeunmoPro-Regular.woff2') format('woff2');
@@ -20,7 +21,8 @@
             box-sizing: border-box;
             font-family: 'NeoDunggeunGothicPro', sans-serif;
         }
-        
+
+        /* 2. 배경 및 레이아웃 */
         body {
             background-color: #8b5a2b; 
             margin: 0;
@@ -39,6 +41,7 @@
             z-index: -1;
         }
 
+        /* 3. 컨트롤 패널 */
         .controls {
             display: flex;
             justify-content: center;
@@ -96,11 +99,12 @@
         .checklist-mode .checklist-section { flex: 1; padding: 15px; border-width: 5px; opacity: 1; }
         .checklist-mode .notice-section { flex: 0; padding: 0; border-width: 0; margin: 0; opacity: 0; }
 
-        h2 {
+h2 {
             text-align: center; margin: 0 0 10px 0; padding-bottom: 10px;
             border-bottom: 3px solid #ccc; color: #222;
-            font-size: calc(var(--content-font-size) * 1.2);
-            transition: font-size 0.2s ease; white-space: nowrap; 
+            font-size: 30px; /* 💡 기존 calc(...) 부분을 지우고 30px로 크기를 고정했어요! */
+            white-space: nowrap; 
+            /* 🐛 transition 속성은 크기가 변할 때 부드럽게 해주는 역할이라, 이제 지워주셔도 됩니다. */
         }
 
         .date-display {
@@ -110,10 +114,11 @@
 
         textarea.notice-content {
             width: 100%; flex: 1; resize: none; background-color: #fff; border: 3px solid #888;
-            padding: 15px; line-height: 1.6; font-size: calc(var(--content-font-size) * 1.2);
+            padding: 15px; line-height: 1.3; font-size: calc(var(--content-font-size) * 1.2);
             transition: font-size 0.2s ease; min-height: 0; 
         }
-        
+
+        /* 드롭박스 스타일 */
         .admin-controls {
             margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px;
             align-items: stretch; background: #e9e9e9; padding: 10px; border: 3px solid #888;
@@ -164,6 +169,7 @@
 
         .btn-clear { background-color: #ffaaaa; color: #cc0000; font-weight: bold; }
 
+        /* 체크리스트 스타일 */
         .checklist-items { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0; }
 
         .check-item {
@@ -205,6 +211,7 @@
 
         .drag-placeholder { height: 6px; background-color: #888888; border-radius: 3px; margin: 2px 0; pointer-events: none; }
 
+        /* 모달 스타일 */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 5000; }
         .modal-box { background: #f9f9f9; border: 5px solid #333; box-shadow: 6px 6px 0px rgba(0,0,0,0.5); padding: 20px; width: 400px; max-width: 90%; text-align: center; }
         .modal-box h3 { margin-top: 0; font-size: 1.5rem; border-bottom: 3px dashed #ccc; padding-bottom: 10px; }
@@ -269,7 +276,240 @@
     </div>
 
     <script>
-        const _0x52c961=_0x15d3;(function(_0xb56364,_0x3b3ed5){const _0x430a02=_0x15d3,_0x5d4b37=_0xb56364();while(!![]){try{const _0x41e7d0=parseInt(_0x430a02(0x1a5))/0x1+-parseInt(_0x430a02(0x187))/0x2+-parseInt(_0x430a02(0x199))/0x3+parseInt(_0x430a02(0x17a))/0x4+-parseInt(_0x430a02(0x1d2))/0x5*(parseInt(_0x430a02(0x1e3))/0x6)+parseInt(_0x430a02(0x195))/0x7*(-parseInt(_0x430a02(0x159))/0x8)+-parseInt(_0x430a02(0x158))/0x9*(-parseInt(_0x430a02(0x17d))/0xa);if(_0x41e7d0===_0x3b3ed5)break;else _0x5d4b37['push'](_0x5d4b37['shift']());}catch(_0x4bb6a9){_0x5d4b37['push'](_0x5d4b37['shift']());}}}(_0x58b2,0x2b4b5));function generatePixelPattern(_0x1cbf3e,_0x2ece14,_0x299203){const _0x4b162d=_0x15d3,_0xc2c705=document[_0x4b162d(0x1a4)](_0x4b162d(0x18b));_0xc2c705['width']=_0x299203,_0xc2c705[_0x4b162d(0x1b6)]=_0x299203;const _0x39d21d=_0xc2c705[_0x4b162d(0x1df)]('2d');for(let _0x1a0daa=0x0;_0x1a0daa<_0x299203;_0x1a0daa+=_0x2ece14){for(let _0x28ee92=0x0;_0x28ee92<_0x299203;_0x28ee92+=_0x2ece14){_0x39d21d['fillStyle']=_0x1cbf3e[Math[_0x4b162d(0x1d8)](Math[_0x4b162d(0x176)]()*_0x1cbf3e[_0x4b162d(0x191)])],_0x39d21d[_0x4b162d(0x19d)](_0x28ee92,_0x1a0daa,_0x2ece14,_0x2ece14);}}return _0xc2c705[_0x4b162d(0x192)]();}function generateGrassOverhangPattern(_0x532039,_0xb9750b,_0x5836f0,_0x5132e9){const _0x20c7ef=_0x15d3,_0x4cad41=document[_0x20c7ef(0x1a4)](_0x20c7ef(0x18b));_0x4cad41[_0x20c7ef(0x16f)]=_0x5836f0,_0x4cad41[_0x20c7ef(0x1b6)]=_0x5132e9;const _0x4d3212=_0x4cad41[_0x20c7ef(0x1df)]('2d');for(let _0x23ff0a=0x0;_0x23ff0a<_0x5836f0;_0x23ff0a+=_0xb9750b){let _0x19b72b=(0x4+Math[_0x20c7ef(0x1d8)](Math[_0x20c7ef(0x176)]()*0x5))*_0xb9750b;for(let _0x1c0760=0x0;_0x1c0760<_0x19b72b;_0x1c0760+=_0xb9750b){_0x4d3212[_0x20c7ef(0x1bb)]=_0x532039[Math[_0x20c7ef(0x1d8)](Math['random']()*_0x532039[_0x20c7ef(0x191)])],_0x4d3212['fillRect'](_0x23ff0a,_0x1c0760,_0xb9750b,_0xb9750b),_0x1c0760===_0x19b72b-_0xb9750b&&(_0x4d3212[_0x20c7ef(0x1bb)]=_0x20c7ef(0x1ee),_0x4d3212[_0x20c7ef(0x19d)](_0x23ff0a,_0x1c0760,_0xb9750b,_0xb9750b));}}return _0x4cad41[_0x20c7ef(0x192)]();}function applyMinecraftBackground(){const _0xf1a971=_0x15d3,_0x89193d=[_0xf1a971(0x1aa),_0xf1a971(0x1a7),_0xf1a971(0x1e4),_0xf1a971(0x1c1),_0xf1a971(0x1ad),_0xf1a971(0x174)],_0x54857a=[_0xf1a971(0x1d5),_0xf1a971(0x1f2),'#7a4d2b','#8b5a32',_0xf1a971(0x17b),_0xf1a971(0x188)];document['body'][_0xf1a971(0x1fc)][_0xf1a971(0x165)]=_0xf1a971(0x1c7)+generatePixelPattern(_0x54857a,0xa,0x190)+')',document[_0xf1a971(0x171)]('.grass-top')[_0xf1a971(0x1fc)][_0xf1a971(0x165)]='url('+generateGrassOverhangPattern(_0x89193d,0xa,0x190,0x64)+')';}applyMinecraftBackground();function updateDate(){const _0x83d8f9=_0x15d3,_0x2367a0={'timeZone':_0x83d8f9(0x190),'year':_0x83d8f9(0x157),'month':'long','day':_0x83d8f9(0x157),'weekday':'long'};document['getElementById'](_0x83d8f9(0x200))[_0x83d8f9(0x1ff)]=new Intl[(_0x83d8f9(0x1f8))](_0x83d8f9(0x1b1),_0x2367a0)[_0x83d8f9(0x1f1)](new Date());}updateDate();function setViewMode(_0x4016ac){const _0x26d913=_0x15d3;document['getElementById']('mainContainer')[_0x26d913(0x19b)]=_0x26d913(0x163)+_0x4016ac+_0x26d913(0x16e);}const fullscreenBtn=document[_0x52c961(0x1ca)]('fullscreenBtn');function toggleFullScreen(){const _0x5114d0=_0x52c961;if(!document[_0x5114d0(0x1ed)])document['documentElement'][_0x5114d0(0x173)]();else document[_0x5114d0(0x196)]();}document[_0x52c961(0x1fb)]('fullscreenchange',()=>{const _0x1d3490=_0x52c961;fullscreenBtn[_0x1d3490(0x1ff)]=document[_0x1d3490(0x1ed)]?_0x1d3490(0x1d3):_0x1d3490(0x1e9);});function changeFontSize(_0x3fbafc){const _0x10d66a=_0x52c961;let _0x524d45=parseInt(getComputedStyle(document[_0x10d66a(0x1cf)])['getPropertyValue']('--content-font-size'))||0x19;_0x524d45=Math[_0x10d66a(0x19a)](0xe,Math[_0x10d66a(0x1ae)](0x2d,_0x524d45+_0x3fbafc)),document[_0x10d66a(0x1cf)]['style'][_0x10d66a(0x1e1)](_0x10d66a(0x1c8),_0x524d45+'px'),saveToLocal();}let modalOkCallback=null;function openModal(_0xa583de,_0x38f58c,_0x3826da,_0x4c5dc2){const _0x30f24e=_0x52c961;document[_0x30f24e(0x1ca)]('customModal')[_0x30f24e(0x1fc)][_0x30f24e(0x1a8)]=_0x30f24e(0x186),document[_0x30f24e(0x1ca)](_0x30f24e(0x19c))[_0x30f24e(0x1ff)]=_0x38f58c,document['getElementById'](_0x30f24e(0x16c))[_0x30f24e(0x1ff)]=_0x3826da;const _0x3be35e=document['getElementById'](_0x30f24e(0x1da));_0x3be35e['style'][_0x30f24e(0x1a8)]=_0xa583de==='prompt'?_0x30f24e(0x15a):_0x30f24e(0x1fd),_0x3be35e[_0x30f24e(0x18c)]='';if(_0xa583de===_0x30f24e(0x1a6))setTimeout(()=>_0x3be35e[_0x30f24e(0x1ac)](),0x32);modalOkCallback=()=>{const _0x3e2ea3=_0x30f24e;_0x4c5dc2(_0x3be35e['value'][_0x3e2ea3(0x1b2)]()),closeModal();};}function closeModal(){const _0x13b931=_0x52c961;document['getElementById'](_0x13b931(0x1a1))[_0x13b931(0x1fc)][_0x13b931(0x1a8)]=_0x13b931(0x1fd);}document[_0x52c961(0x1ca)](_0x52c961(0x1c2))[_0x52c961(0x15f)]=()=>modalOkCallback&&modalOkCallback(),document['getElementById'](_0x52c961(0x19e))[_0x52c961(0x15f)]=closeModal;let templateData={'안전':[_0x52c961(0x18d)],'안내장':[_0x52c961(0x167)],'준비물':[_0x52c961(0x1b7)]},currentCategory='안전',currentItem='',lastCursorPosition=null;function saveToLocal(){const _0x54394d=_0x52c961,_0x2d33d8={'notice':document[_0x54394d(0x1ca)](_0x54394d(0x1e2))[_0x54394d(0x18c)],'checklist':[...document[_0x54394d(0x1bc)](_0x54394d(0x189))][_0x54394d(0x1e8)](_0x384ecf=>({'text':_0x384ecf[_0x54394d(0x171)](_0x54394d(0x201))[_0x54394d(0x1ff)][_0x54394d(0x1b2)](),'completed':_0x384ecf[_0x54394d(0x1bd)][_0x54394d(0x1ef)](_0x54394d(0x198))})),'templates':templateData,'finalMessage':document[_0x54394d(0x171)](_0x54394d(0x19f))[_0x54394d(0x180)],'fontSize':getComputedStyle(document['documentElement'])[_0x54394d(0x1d9)](_0x54394d(0x1c8))};localStorage[_0x54394d(0x172)]('classQuestData',JSON[_0x54394d(0x15c)](_0x2d33d8));}function renderCustomSelect(_0x1e71ed,_0x397fc8,_0xa5ebc6,_0x477a0c){const _0x5ed12f=_0x52c961,_0x32dd34=document[_0x5ed12f(0x1ca)](_0x1e71ed);_0x32dd34[_0x5ed12f(0x180)]='';const _0x10a49a=document[_0x5ed12f(0x1a4)](_0x5ed12f(0x1b4));_0x10a49a[_0x5ed12f(0x19b)]=_0x5ed12f(0x1af);const _0x361624=document[_0x5ed12f(0x1a4)]('span');_0x361624['className']=_0x5ed12f(0x1de),_0x361624[_0x5ed12f(0x193)]=_0xa5ebc6||'선택',_0x10a49a['appendChild'](_0x361624);const _0x53fc7c=document[_0x5ed12f(0x1a4)](_0x5ed12f(0x1b4));_0x53fc7c[_0x5ed12f(0x19b)]=_0x5ed12f(0x1fa),_0x397fc8[_0x5ed12f(0x17e)](_0x4e7d88=>{const _0x3cb961=_0x5ed12f,_0x4c8ed5=document[_0x3cb961(0x1a4)](_0x3cb961(0x1b4));_0x4c8ed5[_0x3cb961(0x19b)]=_0x3cb961(0x168),_0x4c8ed5['innerHTML']='<span>'+_0x4e7d88+_0x3cb961(0x183),_0x4c8ed5[_0x3cb961(0x17c)]=_0x236a22=>{const _0x21198f=_0x3cb961;_0x236a22[_0x21198f(0x1ab)](),_0x477a0c==='category'?(currentCategory=_0x4e7d88,currentItem=templateData[_0x4e7d88][0x0]||''):currentItem=_0x4e7d88,updateAllSelects(),_0x32dd34[_0x21198f(0x1bd)]['remove'](_0x21198f(0x15e));};const _0x380aac=document[_0x3cb961(0x1a4)](_0x3cb961(0x1c4));_0x380aac['className']=_0x3cb961(0x1a2),_0x380aac[_0x3cb961(0x193)]='✖',_0x380aac[_0x3cb961(0x17c)]=_0x190bab=>{const _0x5b40b3=_0x3cb961;_0x190bab['stopPropagation'](),_0x190bab[_0x5b40b3(0x1ab)]();if(_0x477a0c===_0x5b40b3(0x1d7))deleteCategory(_0x4e7d88);else deleteTemplateItem(currentCategory,_0x4e7d88);},_0x4c8ed5['appendChild'](_0x380aac),_0x53fc7c[_0x3cb961(0x1b9)](_0x4c8ed5);});const _0x1fac95=document['createElement'](_0x5ed12f(0x1b4));_0x1fac95['className']=_0x5ed12f(0x181),_0x1fac95[_0x5ed12f(0x193)]=_0x5ed12f(0x185),_0x1fac95[_0x5ed12f(0x17c)]=_0x6eac28=>{_0x6eac28['preventDefault']();if(_0x477a0c==='category')addNewCategory();else addNewItem(currentCategory);},_0x53fc7c[_0x5ed12f(0x1b9)](_0x1fac95),_0x10a49a['onclick']=_0x437d87=>{const _0x508e6d=_0x5ed12f;_0x437d87[_0x508e6d(0x1f7)](),document[_0x508e6d(0x1bc)]('.custom-select-container')[_0x508e6d(0x17e)](_0x2044a5=>_0x2044a5!==_0x32dd34&&_0x2044a5[_0x508e6d(0x1bd)][_0x508e6d(0x197)](_0x508e6d(0x15e))),_0x32dd34[_0x508e6d(0x1bd)]['toggle'](_0x508e6d(0x15e));},_0x32dd34[_0x5ed12f(0x1b9)](_0x10a49a),_0x32dd34[_0x5ed12f(0x1b9)](_0x53fc7c);}document[_0x52c961(0x1fb)](_0x52c961(0x16d),_0x4f8b66=>{const _0xb31e0f=_0x52c961;!_0x4f8b66[_0xb31e0f(0x1ea)][_0xb31e0f(0x1bf)](_0xb31e0f(0x162))&&document[_0xb31e0f(0x1bc)]('.custom-select-container')[_0xb31e0f(0x17e)](_0x2e7d7e=>_0x2e7d7e[_0xb31e0f(0x1bd)][_0xb31e0f(0x197)](_0xb31e0f(0x15e)));});function updateAllSelects(){const _0x4a6826=_0x52c961,_0x3f6feb=Object[_0x4a6826(0x1a3)](templateData);if(!currentCategory||!_0x3f6feb[_0x4a6826(0x1c5)](currentCategory))currentCategory=_0x3f6feb[0x0]||'';renderCustomSelect(_0x4a6826(0x164),_0x3f6feb,currentCategory,_0x4a6826(0x1d7));const _0xbfdb5=templateData[currentCategory]||[];if(!currentItem||!_0xbfdb5['includes'](currentItem))currentItem=_0xbfdb5[0x0]||'';renderCustomSelect(_0x4a6826(0x1e0),_0xbfdb5,currentItem,_0x4a6826(0x15d));}function addNewCategory(){const _0x228be9=_0x52c961;openModal(_0x228be9(0x1a6),_0x228be9(0x1d0),_0x228be9(0x1dd),_0x14f122=>{_0x14f122&&!templateData[_0x14f122]&&(templateData[_0x14f122]=[],currentCategory=_0x14f122,updateAllSelects(),saveToLocal());});}function addNewItem(_0xb7697){const _0x32f259=_0x52c961;openModal(_0x32f259(0x1a6),_0x32f259(0x194),'내용\x20입력하기',_0x59f6ab=>{const _0x58df3c=_0x32f259;_0x59f6ab&&!templateData[_0xb7697][_0x58df3c(0x1c5)](_0x59f6ab)&&(templateData[_0xb7697]['push'](_0x59f6ab),currentItem=_0x59f6ab,updateAllSelects(),saveToLocal());});}function _0x58b2(){const _0x482200=['getSelection','closest','nextSibling','#78c244','modalOkBtn','classQuestData','button','includes','blur','url(','--content-font-size','fontSize','getElementById','draggable','insertBefore','.check-item:not(.fixed-end)','notice','documentElement','새\x20카테고리','finalMessage','385bkySoT','🖥️\x20일반화면','초기화','#5c3a21',']의\x20모든\x20내용이\x20삭제됩니다.','category','floor','getPropertyValue','modalInput','parentNode','filter','내용\x20입력하기','custom-select-header-text','getContext','itemSelectContainer','setProperty','noticeText','888RLDJNc','#70b23f','templates','true','contentEditable','map','🖥️\x20전체화면','target','newCheckInput','endsWith','fullscreenElement','rgba(0,\x200,\x200,\x200.25)','contains','미니\x20빗자루로\x20책상\x20아래\x20쓸기','format','#6b4426','onblur','element','mouseup','shiftKey','stopPropagation','DateTimeFormat','checklist','custom-select-list','addEventListener','style','none','top','innerText','dateDisplay','span','numeric','27EBvuJt','824HNnfzk','block','check-item','stringify','item','open','onclick','책상\x20서랍\x20정리하기','checklistContainer','.custom-select-container','container\x20','categorySelectContainer','backgroundImage','clientY','안내장\x20부모님께\x20전달하기','custom-select-item','startsWith','toggle','<div\x20class=\x22check-box\x22\x20onclick=\x22toggleCheck(this)\x22></div><span\x20onclick=\x22enterEditMode(this)\x22\x20onblur=\x22exitEditMode(this)\x22\x20onkeydown=\x22preventEnter(event)\x22\x20spellcheck=\x22false\x22>','modalDesc','mousedown','-mode','width','finalCheckItem','querySelector','setItem','requestFullscreen','#527a2c','confirm','random','\x20completed','text','Enter','451028HXlLBL','#9c6538','onmousedown','1651330QzByGP','forEach','key','innerHTML','custom-add-btn','reduce','</span>','selectionEnd','➕\x20추가...','flex','527106ELsSMF','#ad703e','#checklistContainer\x20.check-item:not(.fixed-end)','split','canvas','value','길을\x20건널\x20때\x20좌우\x20살피기','교과서\x20사물함에\x20세워서\x20꽂아두기','match','Asia/Seoul','length','toDataURL','textContent','새\x20항목','5180myKJob','exitFullscreen','remove','completed','402843gihOfL','max','className','modalTitle','fillRect','modalCancelBtn','#finalCheckItem\x20span','getItem','customModal','custom-del-btn','keys','createElement','54627ruwAJX','prompt','#6ba038','display','parentElement','#5b8731','preventDefault','focus','#82d14b','min','custom-select-header','selectionStart','ko-KR','trim','내용을\x20전부\x20지울까요?','div','</span><button\x20class=\x22delete-btn\x22\x20onclick=\x22deleteItem(this)\x22>✖</button>','height','월요일\x20실내화','false','appendChild','parse','fillStyle','querySelectorAll','classList'];_0x58b2=function(){return _0x482200;};return _0x58b2();}function deleteCategory(_0xa50951){const _0x554ebe=_0x52c961;openModal(_0x554ebe(0x175),'경고','['+_0xa50951+_0x554ebe(0x1d6),()=>{delete templateData[_0xa50951],currentCategory='',updateAllSelects(),saveToLocal();});}function deleteTemplateItem(_0x22918a,_0x2395e7){templateData[_0x22918a]=templateData[_0x22918a]['filter'](_0x2f3633=>_0x2f3633!==_0x2395e7),updateAllSelects(),saveToLocal();}const noticeArea=document[_0x52c961(0x1ca)](_0x52c961(0x1e2));function renumberNoticeText(){const _0x49cfde=_0x52c961;let _0x190c39=noticeArea[_0x49cfde(0x18c)][_0x49cfde(0x18a)]('\x0a'),_0x5bdc3c=0x1;noticeArea[_0x49cfde(0x18c)]=_0x190c39[_0x49cfde(0x1e8)](_0x5df53b=>{const _0x45fad7=_0x49cfde,_0xba5aeb=_0x5df53b[_0x45fad7(0x18f)](/^\s*\d+\.\s*(.*)/);return _0xba5aeb?_0x5bdc3c++ +'.\x20'+_0xba5aeb[0x1][_0x45fad7(0x1b2)]():_0x5df53b;})['join']('\x0a');}noticeArea['addEventListener'](_0x52c961(0x1f5),()=>{const _0x572367=_0x52c961;lastCursorPosition=noticeArea[_0x572367(0x1b0)],noticeArea['selectionStart']===noticeArea[_0x572367(0x184)]&&(renumberNoticeText(),saveToLocal());}),noticeArea[_0x52c961(0x1f3)]=()=>{renumberNoticeText(),saveToLocal();};function appendNotice(){const _0x84fd11=_0x52c961;if(!currentItem)return;let _0x44974f=noticeArea[_0x84fd11(0x18c)];const _0x19ea65='1.\x20'+currentItem;if(lastCursorPosition!==null){let _0xbca60c=_0x44974f['substring'](0x0,lastCursorPosition),_0x129e06=_0x44974f['substring'](lastCursorPosition);const _0x147fdd=_0xbca60c[_0x84fd11(0x191)]>0x0&&!_0xbca60c[_0x84fd11(0x1ec)]('\x0a')?'\x0a':'',_0x470455=_0x129e06[_0x84fd11(0x191)]>0x0&&!_0x129e06[_0x84fd11(0x169)]('\x0a')?'\x0a':'';noticeArea[_0x84fd11(0x18c)]=_0xbca60c+_0x147fdd+_0x19ea65+_0x470455+_0x129e06;}else noticeArea[_0x84fd11(0x18c)]+=(_0x44974f[_0x84fd11(0x191)]>0x0&&!_0x44974f['endsWith']('\x0a')?'\x0a':'')+_0x19ea65;renumberNoticeText(),saveToLocal(),noticeArea[_0x84fd11(0x1ac)]();}function clearNotice(){const _0xf82181=_0x52c961;openModal('confirm',_0xf82181(0x1d4),_0xf82181(0x1b3),()=>{noticeArea['value']='',saveToLocal();});}function enterEditMode(_0x2dc965){const _0x16fba4=_0x52c961;_0x2dc965[_0x16fba4(0x1e7)]=_0x16fba4(0x1e6),_0x2dc965[_0x16fba4(0x1ac)]();}function exitEditMode(_0x848ad2){const _0x1a1c14=_0x52c961;_0x848ad2[_0x1a1c14(0x1e7)]=_0x1a1c14(0x1b8),window[_0x1a1c14(0x1be)]()['removeAllRanges'](),saveToLocal();}function preventEnter(_0x28fbc9){const _0x277ae0=_0x52c961;_0x28fbc9[_0x277ae0(0x17f)]===_0x277ae0(0x179)&&!_0x28fbc9[_0x277ae0(0x1f6)]&&(_0x28fbc9['preventDefault'](),_0x28fbc9['target'][_0x277ae0(0x1c6)]());}function toggleCheck(_0xa2a94a){const _0xc6f306=_0x52c961;_0xa2a94a[_0xc6f306(0x1a9)][_0xc6f306(0x1bd)][_0xc6f306(0x16a)](_0xc6f306(0x198)),saveToLocal();}function deleteItem(_0x802f2a){const _0x268bcb=_0x52c961;_0x802f2a['parentElement'][_0x268bcb(0x197)](),saveToLocal();}function _0x15d3(_0x47a122,_0x2013aa){_0x47a122=_0x47a122-0x157;const _0x58b2ba=_0x58b2();let _0x15d32b=_0x58b2ba[_0x47a122];return _0x15d32b;}const checklist=document['getElementById'](_0x52c961(0x161)),placeholder=document[_0x52c961(0x1a4)]('div');placeholder[_0x52c961(0x19b)]='drag-placeholder';let dragged=null;function addDragEvents(_0x226b62){_0x226b62['ondragstart']=function(_0x4ef3b1){const _0x27bb0f=_0x15d3;if(this['querySelector'](_0x27bb0f(0x201))[_0x27bb0f(0x1e7)]===_0x27bb0f(0x1e6)){_0x4ef3b1['preventDefault']();return;}dragged=this,setTimeout(()=>{const _0x36d883=_0x27bb0f;this[_0x36d883(0x1fc)][_0x36d883(0x1a8)]=_0x36d883(0x1fd),this['parentNode']['insertBefore'](placeholder,this[_0x36d883(0x1c0)]);},0x0);},_0x226b62['ondragend']=function(){const _0x18e3d1=_0x15d3;dragged&&(dragged[_0x18e3d1(0x1fc)][_0x18e3d1(0x1a8)]=_0x18e3d1(0x186),placeholder[_0x18e3d1(0x1db)][_0x18e3d1(0x1cc)](dragged,placeholder),dragged=null),placeholder[_0x18e3d1(0x197)](),saveToLocal();};}checklist['ondragover']=function(_0x42153f){const _0x1758d9=_0x52c961;_0x42153f['preventDefault']();if(!dragged)return;const _0x1c4332=getAfter(this,_0x42153f[_0x1758d9(0x166)]);if(!_0x1c4332)this['insertBefore'](placeholder,document[_0x1758d9(0x1ca)](_0x1758d9(0x170)));else this[_0x1758d9(0x1cc)](placeholder,_0x1c4332);};function getAfter(_0x1c7680,_0x2573cb){const _0x53077a=_0x52c961,_0x196951=[..._0x1c7680[_0x53077a(0x1bc)](_0x53077a(0x1cd))][_0x53077a(0x1dc)](_0x1e369a=>_0x1e369a!==dragged&&_0x1e369a!==placeholder);return _0x196951[_0x53077a(0x182)]((_0x49178f,_0x313571)=>{const _0x13121b=_0x53077a,_0x4f487c=_0x313571['getBoundingClientRect'](),_0x2fc3a9=_0x2573cb-_0x4f487c[_0x13121b(0x1fe)]-_0x4f487c['height']/0x2;if(_0x2fc3a9<0x0&&_0x2fc3a9>_0x49178f['offset'])return{'offset':_0x2fc3a9,'element':_0x313571};else return _0x49178f;},{'offset':Number['NEGATIVE_INFINITY']})[_0x53077a(0x1f4)];}function addCheckItem(_0x1c96dd=null,_0x5385f7=![]){const _0x4fa689=_0x52c961,_0x14ac2c=document[_0x4fa689(0x1ca)](_0x4fa689(0x1eb)),_0x1242f5=_0x1c96dd||_0x14ac2c[_0x4fa689(0x18c)]['trim']();if(!_0x1242f5)return;const _0x310452=document['createElement'](_0x4fa689(0x1b4));_0x310452[_0x4fa689(0x19b)]=_0x4fa689(0x15b)+(_0x5385f7?_0x4fa689(0x177):''),_0x310452[_0x4fa689(0x1cb)]=!![],_0x310452[_0x4fa689(0x180)]=_0x4fa689(0x16b)+_0x1242f5+_0x4fa689(0x1b5),addDragEvents(_0x310452),checklist[_0x4fa689(0x1cc)](_0x310452,document[_0x4fa689(0x1ca)](_0x4fa689(0x170))),!_0x1c96dd&&(_0x14ac2c[_0x4fa689(0x18c)]='',saveToLocal());}function loadFromLocal(){const _0xaeac2=_0x52c961,_0x82ce61=localStorage[_0xaeac2(0x1a0)](_0xaeac2(0x1c3));if(_0x82ce61){const _0x3f8978=JSON[_0xaeac2(0x1ba)](_0x82ce61);if(_0x3f8978[_0xaeac2(0x1e5)])templateData=_0x3f8978[_0xaeac2(0x1e5)];if(_0x3f8978[_0xaeac2(0x1d1)])document[_0xaeac2(0x171)](_0xaeac2(0x19f))[_0xaeac2(0x180)]=_0x3f8978[_0xaeac2(0x1d1)];_0x3f8978[_0xaeac2(0x1c9)]&&document[_0xaeac2(0x1cf)][_0xaeac2(0x1fc)][_0xaeac2(0x1e1)](_0xaeac2(0x1c8),_0x3f8978[_0xaeac2(0x1c9)]),noticeArea[_0xaeac2(0x18c)]=_0x3f8978[_0xaeac2(0x1ce)]||'',_0x3f8978[_0xaeac2(0x1f9)]&&_0x3f8978['checklist'][_0xaeac2(0x191)]>0x0?_0x3f8978[_0xaeac2(0x1f9)][_0xaeac2(0x17e)](_0x3c7da7=>addCheckItem(_0x3c7da7[_0xaeac2(0x178)],_0x3c7da7['completed'])):defCheck();}else defCheck();updateAllSelects();}function defCheck(){const _0x556ce9=_0x52c961;addCheckItem(_0x556ce9(0x1f0)),addCheckItem(_0x556ce9(0x160)),addCheckItem(_0x556ce9(0x18e));}loadFromLocal();
+        // 배경 및 공통 함수들 생략 없이 유지...
+        function generatePixelPattern(colors, pixelSize, size) {
+            const canvas = document.createElement('canvas'); canvas.width = size; canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            for (let y = 0; y < size; y += pixelSize) {
+                for (let x = 0; x < size; x += pixelSize) {
+                    ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+                    ctx.fillRect(x, y, pixelSize, pixelSize);
+                }
+            }
+            return canvas.toDataURL(); 
+        }
+
+        function generateGrassOverhangPattern(colors, pixelSize, width, height) {
+            const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            for (let x = 0; x < width; x += pixelSize) {
+                let overhangLimit = (4 + Math.floor(Math.random() * 5)) * pixelSize;
+                for (let y = 0; y < overhangLimit; y += pixelSize) {
+                    ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+                    ctx.fillRect(x, y, pixelSize, pixelSize);
+                    if (y === overhangLimit - pixelSize) { ctx.fillStyle = 'rgba(0, 0, 0, 0.25)'; ctx.fillRect(x, y, pixelSize, pixelSize); }
+                }
+            }
+            return canvas.toDataURL();
+        }
+
+        function applyMinecraftBackground() {
+            const greenShades = ['#5b8731', '#6ba038', '#70b23f', '#78c244', '#82d14b', '#527a2c'];
+            const brownShades = ['#5c3a21', '#6b4426', '#7a4d2b', '#8b5a32', '#9c6538', '#ad703e'];
+            document.body.style.backgroundImage = `url(${generatePixelPattern(brownShades, 10, 400)})`;
+            document.querySelector('.grass-top').style.backgroundImage = `url(${generateGrassOverhangPattern(greenShades, 10, 400, 100)})`;
+        }
+        applyMinecraftBackground();
+
+        function updateDate() {
+            const options = { timeZone: 'Asia/Seoul', year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+            document.getElementById('dateDisplay').innerText = new Intl.DateTimeFormat('ko-KR', options).format(new Date());
+        }
+        updateDate();
+
+        function setViewMode(mode) { document.getElementById('mainContainer').className = 'container ' + mode + '-mode'; }
+
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+            else document.exitFullscreen();
+        }
+        document.addEventListener('fullscreenchange', () => {
+            fullscreenBtn.innerText = document.fullscreenElement ? "🖥️ 일반화면" : "🖥️ 전체화면";
+        });
+
+        // 폰트 크기 변경 및 저장 로직 수정 😊
+        function changeFontSize(step) {
+            let currentFontSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--content-font-size')) || 25;
+            currentFontSize = Math.max(20, Math.min(65, currentFontSize + step));
+            document.documentElement.style.setProperty('--content-font-size', currentFontSize + 'px');
+            saveToLocal(); // 크기 변경 시 즉시 저장 ✨
+        }
+
+        let modalOkCallback = null;
+        function openModal(type, title, desc, onOk) {
+            document.getElementById('customModal').style.display = 'flex';
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = desc;
+            const inputField = document.getElementById('modalInput');
+            inputField.style.display = (type === 'prompt') ? 'block' : 'none';
+            inputField.value = '';
+            if(type === 'prompt') setTimeout(() => inputField.focus(), 50);
+            modalOkCallback = () => { onOk(inputField.value.trim()); closeModal(); };
+        }
+        function closeModal() { document.getElementById('customModal').style.display = 'none'; }
+        document.getElementById('modalOkBtn').onclick = () => modalOkCallback && modalOkCallback();
+        document.getElementById('modalCancelBtn').onclick = closeModal;
+
+        let templateData = { "안전": ["길을 건널 때 좌우 살피기"], "안내장": ["안내장 부모님께 전달하기"], "준비물": ["월요일 실내화"] };
+        let currentCategory = "안전"; let currentItem = ""; let lastCursorPosition = null;
+
+        // 저장 로직에 폰트 크기 추가 💡
+        function saveToLocal() {
+            const data = {
+                notice: document.getElementById('noticeText').value,
+                checklist: [...document.querySelectorAll('#checklistContainer .check-item:not(.fixed-end)')].map(item => ({
+                    text: item.querySelector('span').innerText.trim(),
+                    completed: item.classList.contains('completed')
+                })),
+                templates: templateData,
+                finalMessage: document.querySelector('#finalCheckItem span').innerHTML,
+                fontSize: getComputedStyle(document.documentElement).getPropertyValue('--content-font-size') // 폰트 크기 추가!
+            };
+            localStorage.setItem('classQuestData', JSON.stringify(data));
+        }
+
+        function renderCustomSelect(containerId, optionsList, selectedValue, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            const header = document.createElement('div');
+            header.className = 'custom-select-header';
+            const headerText = document.createElement('span');
+            headerText.className = 'custom-select-header-text';
+            headerText.textContent = selectedValue || '선택';
+            header.appendChild(headerText);
+            const list = document.createElement('div');
+            list.className = 'custom-select-list';
+            optionsList.forEach(opt => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'custom-select-item';
+                itemDiv.innerHTML = `<span>${opt}</span>`;
+                itemDiv.onmousedown = (e) => {
+                    e.preventDefault(); 
+                    if (type === 'category') { currentCategory = opt; currentItem = templateData[opt][0] || ""; }
+                    else { currentItem = opt; }
+                    updateAllSelects();
+                    container.classList.remove('open');
+                };
+                const delBtn = document.createElement('button');
+                delBtn.className = 'custom-del-btn'; delBtn.textContent = '✖';
+                delBtn.onmousedown = (e) => {
+                    e.stopPropagation(); e.preventDefault();
+                    if (type === 'category') deleteCategory(opt); else deleteTemplateItem(currentCategory, opt);
+                };
+                itemDiv.appendChild(delBtn);
+                list.appendChild(itemDiv);
+            });
+            const addDiv = document.createElement('div');
+            addDiv.className = 'custom-add-btn'; addDiv.textContent = '➕ 추가...';
+            addDiv.onmousedown = (e) => { e.preventDefault(); if (type === 'category') addNewCategory(); else addNewItem(currentCategory); };
+            list.appendChild(addDiv);
+            header.onclick = (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.custom-select-container').forEach(c => c !== container && c.classList.remove('open'));
+                container.classList.toggle('open');
+            };
+            container.appendChild(header); container.appendChild(list);
+        }
+
+        document.addEventListener('mousedown', (e) => { if (!e.target.closest('.custom-select-container')) { document.querySelectorAll('.custom-select-container').forEach(c => c.classList.remove('open')); } });
+
+        function updateAllSelects() {
+            const categories = Object.keys(templateData);
+            if (!currentCategory || !categories.includes(currentCategory)) currentCategory = categories[0] || "";
+            renderCustomSelect('categorySelectContainer', categories, currentCategory, 'category');
+            const items = templateData[currentCategory] || [];
+            if (!currentItem || !items.includes(currentItem)) currentItem = items[0] || "";
+            renderCustomSelect('itemSelectContainer', items, currentItem, 'item');
+        }
+
+        function addNewCategory() { openModal('prompt', '새 카테고리', '내용 입력하기', (val) => { if(val && !templateData[val]) { templateData[val] = []; currentCategory = val; updateAllSelects(); saveToLocal(); } }); }
+        function addNewItem(cat) { openModal('prompt', '새 항목', '내용 입력하기', (val) => { if(val && !templateData[cat].includes(val)) { templateData[cat].push(val); currentItem = val; updateAllSelects(); saveToLocal(); } }); }
+        function deleteCategory(cat) { openModal('confirm', '경고', `[${cat}]의 모든 내용이 삭제됩니다.`, () => { delete templateData[cat]; currentCategory = ""; updateAllSelects(); saveToLocal(); }); }
+        function deleteTemplateItem(cat, item) { templateData[cat] = templateData[cat].filter(i => i !== item); updateAllSelects(); saveToLocal(); }
+
+        const noticeArea = document.getElementById('noticeText');
+        function renumberNoticeText() {
+            let lines = noticeArea.value.split('\n');
+            let num = 1;
+            noticeArea.value = lines.map(line => {
+                const match = line.match(/^\s*\d+\.\s*(.*)/);
+                return match ? `${num++}. ${match[1].trim()}` : line;
+            }).join('\n');
+        }
+        noticeArea.addEventListener('mouseup', () => { lastCursorPosition = noticeArea.selectionStart; if(noticeArea.selectionStart === noticeArea.selectionEnd) { renumberNoticeText(); saveToLocal(); } });
+        noticeArea.onblur = () => { renumberNoticeText(); saveToLocal(); };
+
+        function appendNotice() {
+            if(!currentItem) return;
+            let text = noticeArea.value;
+            const insert = `1. ${currentItem}`;
+            if (lastCursorPosition !== null) {
+                let pre = text.substring(0, lastCursorPosition);
+                let post = text.substring(lastCursorPosition);
+                const p = (pre.length > 0 && !pre.endsWith('\n')) ? '\n' : '';
+                const s = (post.length > 0 && !post.startsWith('\n')) ? '\n' : '';
+                noticeArea.value = pre + p + insert + s + post;
+            } else { noticeArea.value += (text.length > 0 && !text.endsWith('\n') ? '\n' : '') + insert; }
+            renumberNoticeText(); saveToLocal(); noticeArea.focus();
+        }
+        function clearNotice() { openModal('confirm', '초기화', '내용을 전부 지울까요?', () => { noticeArea.value = ''; saveToLocal(); }); }
+
+        function enterEditMode(span) { span.contentEditable = "true"; span.focus(); }
+        function exitEditMode(span) { span.contentEditable = "false"; window.getSelection().removeAllRanges(); saveToLocal(); }
+        function preventEnter(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); e.target.blur(); } }
+        function toggleCheck(box) { box.parentElement.classList.toggle('completed'); saveToLocal(); }
+        function deleteItem(btn) { btn.parentElement.remove(); saveToLocal(); }
+
+        const checklist = document.getElementById('checklistContainer');
+        const placeholder = document.createElement('div'); placeholder.className = 'drag-placeholder';
+        let dragged = null;
+        function addDragEvents(item) {
+            item.ondragstart = function(e) { if(this.querySelector('span').contentEditable === "true") { e.preventDefault(); return; } dragged = this; setTimeout(() => { this.style.display='none'; this.parentNode.insertBefore(placeholder, this.nextSibling); }, 0); };
+            item.ondragend = function() { if(dragged) { dragged.style.display='flex'; placeholder.parentNode.insertBefore(dragged, placeholder); dragged = null; } placeholder.remove(); saveToLocal(); };
+        }
+        checklist.ondragover = function(e) { e.preventDefault(); if(!dragged) return; const after = getAfter(this, e.clientY); if(!after) this.insertBefore(placeholder, document.getElementById('finalCheckItem')); else this.insertBefore(placeholder, after); };
+        function getAfter(container, y) {
+            const els = [...container.querySelectorAll('.check-item:not(.fixed-end)')].filter(el => el !== dragged && el !== placeholder);
+            return els.reduce((closest, child) => { const box = child.getBoundingClientRect(); const offset = y - box.top - box.height / 2; if(offset < 0 && offset > closest.offset) return { offset: offset, element: child }; else return closest; }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function addCheckItem(text = null, comp = false) {
+            const input = document.getElementById('newCheckInput');
+            const val = text || input.value.trim(); if (!val) return;
+            const newItem = document.createElement('div'); newItem.className = 'check-item' + (comp ? ' completed' : ''); newItem.draggable = true;
+            newItem.innerHTML = `<div class="check-box" onclick="toggleCheck(this)"></div><span onclick="enterEditMode(this)" onblur="exitEditMode(this)" onkeydown="preventEnter(event)" spellcheck="false">${val}</span><button class="delete-btn" onclick="deleteItem(this)">✖</button>`;
+            addDragEvents(newItem); checklist.insertBefore(newItem, document.getElementById('finalCheckItem'));
+            if(!text) { input.value = ''; saveToLocal(); }
+        }
+
+        // 불러오기 로직 수정: 폰트 크기 복구 로직 추가 🚀
+        function loadFromLocal() {
+            const saved = localStorage.getItem('classQuestData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.templates) templateData = data.templates;
+                if (data.finalMessage) document.querySelector('#finalCheckItem span').innerHTML = data.finalMessage;
+                
+                // 저장된 폰트 크기 적용 ✨
+                if (data.fontSize) {
+                    document.documentElement.style.setProperty('--content-font-size', data.fontSize);
+                }
+
+                noticeArea.value = data.notice || "";
+                if (data.checklist && data.checklist.length > 0) {
+                    data.checklist.forEach(i => addCheckItem(i.text, i.completed));
+                } else {
+                    defCheck();
+                }
+            } else {
+                defCheck();
+            }
+            updateAllSelects();
+        }
+
+        function defCheck() { addCheckItem("미니 빗자루로 책상 아래 쓸기"); addCheckItem("책상 서랍 정리하기"); addCheckItem("교과서 사물함에 세워서 꽂아두기"); }
+        loadFromLocal();
     </script>
 </body>
 </html>
