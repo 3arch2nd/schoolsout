@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>👾 우리반 하교 퀘스트</title>
+    <title>👾 우리반 퀘스트</title>
     <style>
 
         @font-face {
@@ -65,6 +65,9 @@
         
         .btn-fullscreen { background-color: #55ffff; }
         .btn-font { background-color: #ffff55; font-weight: bold; }
+        
+        .btn-dark { background-color: #888888; color: #ffffff; border: 2px solid #222; font-size: 0.9rem; padding: 4px 8px; box-shadow: inset -2px -2px 0px rgba(0,0,0,0.3), inset 2px 2px 0px rgba(255,255,255,0.2); }
+        .btn-dark:hover { background-color: #999999; }
 
         .container {
             display: flex;
@@ -97,7 +100,15 @@
         .checklist-mode .checklist-section { flex: 1; padding: 15px; border-width: 5px; opacity: 1; }
         .checklist-mode .notice-section { flex: 0; padding: 0; border-width: 0; margin: 0; opacity: 0; }
 
-h2 {
+        .header-with-btns {
+            position: relative; 
+            display: flex; justify-content: center; align-items: center;
+            border-bottom: 3px solid #ccc; margin-bottom: 10px; padding-bottom: 10px;
+        }
+        .header-with-btns h2 { border-bottom: none; margin: 0; padding: 0; }
+        .header-btns { position: absolute; right: 0; display: flex; gap: 5px; }
+
+        h2 {
             text-align: center; margin: 0 0 10px 0; padding-bottom: 10px;
             border-bottom: 3px solid #ccc; color: #222;
             font-size: 30px;
@@ -206,34 +217,83 @@ h2 {
 
         .drag-placeholder { height: 6px; background-color: #888888; border-radius: 3px; margin: 2px 0; pointer-events: none; }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 5000; }
-        .modal-box { background: #f9f9f9; border: 5px solid #333; box-shadow: 6px 6px 0px rgba(0,0,0,0.5); padding: 20px; width: 400px; max-width: 90%; text-align: center; }
-        .modal-box h3 { margin-top: 0; font-size: 1.5rem; border-bottom: 3px dashed #ccc; padding-bottom: 10px; }
-        .modal-box p { font-size: 1.1rem; color: #333; margin-bottom: 15px; line-height: 1.5; }
+        /* 모달 배경에 Blur(흐림) 효과 추가 */
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+            background: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(5px); 
+            display: flex; justify-content: center; align-items: center; z-index: 5000; 
+        }
+        .modal-box { background: #f9f9f9; border: 5px solid #333; box-shadow: 6px 6px 0px rgba(0,0,0,0.5); padding: 20px; width: 400px; max-width: 90%; text-align: center; display: flex; flex-direction: column; }
+        .modal-box h3 { margin-top: 0; font-size: 1.5rem; border-bottom: 3px dashed #ccc; padding-bottom: 10px; margin-bottom: 15px; }
+        .modal-box p { font-size: 1.1rem; color: #333; margin-bottom: 15px; line-height: 1.5; white-space: pre-line; }
         .modal-box input { width: 100%; margin-bottom: 20px; font-size: 1.2rem; text-align: center; padding: 10px; border: 3px solid #888; }
-        .modal-buttons { display: flex; gap: 10px; }
+        .modal-buttons { display: flex; gap: 10px; margin-top: auto; }
         .modal-buttons button { flex: 1; font-size: 1.2rem; padding: 15px 20px; min-height: 55px; }
+
+        /* 히스토리 모달 전용 스타일 */
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            text-align: left;
+            margin-bottom: 15px;
+            border: 3px solid #ccc;
+            background: #fff;
+        }
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px dashed #eee;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .history-item:hover { background: #f0f0f0; }
+        .history-date { font-weight: bold; color: #0000aa; font-size: 1.1rem; flex-shrink: 0; }
+        .history-preview { color: #555; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 10px; }
 
         @media (max-width: 768px) { .container { flex-direction: column; } .split-mode .section { width: 100%; flex: 1; } }
     </style>
 </head>
 <body>
 
-    <div id="customModal" class="modal-overlay" style="display: none;">
+    <div id="customModal" class="modal-overlay" style="display: none; z-index: 6000;">
         <div class="modal-box">
             <h3 id="modalTitle">제목</h3>
             <p id="modalDesc"></p>
             <input type="text" id="modalInput">
             <div class="modal-buttons">
-                <button id="modalOkBtn" style="background-color: #55ff55;">확인</button>
-                <button id="modalCancelBtn" style="background-color: #ffaaaa;">취소</button>
+                <button id="modalOkBtn" style="background-color: #e0e0e0;">확인</button>
+                <button id="modalCancelBtn" style="background-color: #e0e0e0;">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="historyModal" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <h3>📂 알림장 불러오기</h3>
+            <p style="font-size: 0.9rem; color:#666; margin-top:-5px;">열람할 날짜를 선택하세요.</p>
+            <div id="historyList" class="history-list"></div>
+            <div class="modal-buttons">
+                <button onclick="closeHistoryModal()" style="background-color: #e0e0e0;">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="viewHistoryModal" class="modal-overlay" style="display: none;">
+        <div class="modal-box" style="width: 450px;">
+            <h3 id="viewHistoryTitle">0000-00-00 알림장</h3>
+            <textarea id="viewHistoryContent" readonly style="width: 100%; height: 180px; margin-bottom: 15px; font-size: 1.1rem; padding: 10px; border: 3px solid #888; resize: none; background: #eee; outline: none;"></textarea>
+            <div class="modal-buttons">
+                <button id="btnOverwrite" style="background-color: #ffaa00; font-weight: bold; line-height: 1.4;">이 내용으로<br>덮어쓰기</button>
+                <button onclick="goBackToHistoryModal()" style="background-color: #e0e0e0;">닫기</button>
             </div>
         </div>
     </div>
 
     <div class="grass-top"></div>
 
-<div class="controls">
+    <div class="controls">
         <button onclick="setViewMode('split')">📖 둘 다 보기</button>
         <button onclick="setViewMode('notice')">📝 알림장</button>
         <button onclick="setViewMode('checklist')">✅ 체크리스트</button>
@@ -245,9 +305,16 @@ h2 {
 
     <div class="container split-mode" id="mainContainer">
         <div class="section notice-section">
-            <h2>📢 오늘의 알림장</h2>
+            <div class="header-with-btns">
+                <h2>📢 오늘의 알림장</h2>
+                <div class="header-btns">
+                    <button class="btn-dark" onclick="saveNoticeHistory()" title="현재 알림장 저장">💾 저장</button>
+                    <button class="btn-dark" onclick="openHistoryModal()" title="과거 알림장 열람">📂 불러오기</button>
+                </div>
+            </div>
             <div class="date-display" id="dateDisplay"></div>
             <textarea class="notice-content" id="noticeText"></textarea>
+
             <div class="admin-controls">
                 <div id="categorySelectContainer" class="custom-select-container" style="flex: 1; min-width: 120px;"></div>
                 <div id="itemSelectContainer" class="custom-select-container" style="flex: 2; min-width: 180px;"></div>
@@ -310,15 +377,11 @@ h2 {
                 '#002171', '#00154a', '#000a24'            ];
 
             for (let y = 0; y < height; y += pixelSize) {
-
                 let ratio = y / height;
                 let baseIndex = Math.floor(ratio * oceanColors.length);
-
                 for (let x = 0; x < width; x += pixelSize) {
-
                     let offset = Math.floor(Math.random() * 5) - 2; 
                     let finalIndex = Math.max(0, Math.min(oceanColors.length - 1, baseIndex + offset));
-                    
                     ctx.fillStyle = oceanColors[finalIndex];
                     ctx.fillRect(x, y, pixelSize, pixelSize);
                 }
@@ -340,13 +403,11 @@ h2 {
             let randomPhase3 = Math.random() * Math.PI * 2;
 
             for (let x = 0; x < canvasWidth; x += pixelSize) {
-
                 let bigWave = Math.sin(x / 113 + randomPhase1) * 20;   
                 let midWave = Math.sin(x / 47 + randomPhase2) * 10;    
                 let smallWave = Math.sin(x / 19 + randomPhase3) * 4;   
                 
                 let waveOffset = bigWave + midWave + smallWave; 
-
                 let limit = Math.round((55 + waveOffset) / pixelSize) * pixelSize;
 
                 for (let y = 0; y < limit; y += pixelSize) {
@@ -391,6 +452,14 @@ h2 {
             saveToLocal();
         }
 
+        function getFormattedDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
         function updateDate() {
             const options = { timeZone: 'Asia/Seoul', year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
             document.getElementById('dateDisplay').innerText = new Intl.DateTimeFormat('ko-KR', options).format(new Date());
@@ -420,15 +489,135 @@ h2 {
             document.getElementById('customModal').style.display = 'flex';
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalDesc').innerText = desc;
+            
             const inputField = document.getElementById('modalInput');
             inputField.style.display = (type === 'prompt') ? 'block' : 'none';
             inputField.value = '';
             if(type === 'prompt') setTimeout(() => inputField.focus(), 50);
-            modalOkCallback = () => { onOk(inputField.value.trim()); closeModal(); };
+            
+            const cancelBtn = document.getElementById('modalCancelBtn');
+            cancelBtn.style.display = (type === 'alert') ? 'none' : 'block';
+
+            modalOkCallback = () => { onOk && onOk(inputField.value.trim()); closeModal(); };
         }
         function closeModal() { document.getElementById('customModal').style.display = 'none'; }
         document.getElementById('modalOkBtn').onclick = () => modalOkCallback && modalOkCallback();
         document.getElementById('modalCancelBtn').onclick = closeModal;
+
+        function saveNoticeHistory() {
+            const content = document.getElementById('noticeText').value.trim();
+            if (!content) {
+                openModal('alert', '알림', '저장할 내용이 없습니다.', null);
+                return;
+            }
+            
+            const baseDateStr = getFormattedDate();
+            let history = JSON.parse(localStorage.getItem('noticeHistory') || '{}');
+            
+            let maxCount = 0;
+            let hasBase = false;
+
+            for (let key in history) {
+                if (key === baseDateStr) {
+                    hasBase = true;
+                } else if (key.startsWith(baseDateStr + ' (')) {
+                    let match = key.match(/\((\d+)\)$/);
+                    if (match) {
+                        let num = parseInt(match[1]);
+                        if (num > maxCount) maxCount = num;
+                    }
+                }
+            }
+
+            let saveKey = baseDateStr;
+
+            if (hasBase || maxCount > 0) {
+                if (hasBase) {
+                    history[`${baseDateStr} (1)`] = history[baseDateStr];
+                    delete history[baseDateStr];
+                    maxCount = Math.max(maxCount, 1);
+                }
+                saveKey = `${baseDateStr} (${maxCount + 1})`;
+            }
+            
+            history[saveKey] = content;
+            localStorage.setItem('noticeHistory', JSON.stringify(history));
+            
+            openModal('alert', '저장 완료', `[${saveKey}] 알림장이\n저장되었습니다!`, null);
+        }
+
+        function openHistoryModal() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            const history = JSON.parse(localStorage.getItem('noticeHistory') || '{}');
+            
+            const dates = Object.keys(history).sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+
+            if (dates.length === 0) {
+                historyList.innerHTML = '<p style="text-align:center; color:#888; padding:20px;">저장된 알림장이 없습니다.</p>';
+            } else {
+                dates.forEach(date => {
+                    const item = document.createElement('div');
+                    item.className = 'history-item';
+                    const previewText = history[date].replace(/\n/g, ' '); 
+                    
+                    const textDiv = document.createElement('div');
+                    textDiv.style.cssText = 'flex: 1; display: flex; align-items: center; overflow: hidden;';
+                    textDiv.innerHTML = `<span class="history-date">${date}</span><span class="history-preview">${previewText}</span>`;
+                    
+                    const delBtn = document.createElement('button');
+                    delBtn.className = 'delete-btn';
+                    delBtn.innerText = '✖';
+                    delBtn.style.marginLeft = '10px';
+                    delBtn.title = '삭제';
+                    delBtn.onclick = (e) => {
+                        e.stopPropagation(); 
+                        openModal('confirm', '삭제', `해당 기록을 삭제할까요?`, () => {
+                            delete history[date];
+                            localStorage.setItem('noticeHistory', JSON.stringify(history));
+                            openHistoryModal(); 
+                        });
+                    };
+
+                    item.appendChild(textDiv);
+                    item.appendChild(delBtn);
+                    item.onclick = () => { viewHistory(date, history[date]); };
+                    
+                    historyList.appendChild(item);
+                });
+            }
+            document.getElementById('historyModal').style.display = 'flex';
+        }
+
+        function closeHistoryModal() {
+            document.getElementById('historyModal').style.display = 'none';
+        }
+
+        function viewHistory(date, content) {
+            closeHistoryModal(); 
+            document.getElementById('viewHistoryTitle').innerText = `${date} 알림장`;
+            document.getElementById('viewHistoryContent').value = content;
+            
+            document.getElementById('btnOverwrite').onclick = () => {
+                openModal('confirm', '덮어쓰기', '작성된 알림장 내용을 지우고\n이 내용으로 덮어씁니다.\n계속할까요?', () => {
+                    document.getElementById('noticeText').value = content;
+                    saveToLocal();
+                    closeViewHistoryModal();
+                });
+            };
+            
+            document.getElementById('viewHistoryModal').style.display = 'flex';
+        }
+
+        function goBackToHistoryModal() {
+            document.getElementById('viewHistoryModal').style.display = 'none';
+            document.getElementById('historyModal').style.display = 'flex';
+        }
+
+        function closeViewHistoryModal() {
+            document.getElementById('viewHistoryModal').style.display = 'none';
+        }
+        // ---------------------------------
 
         let templateData = { "안전": ["길을 건널 때 좌우 살피기"], "안내장": ["안내장 부모님께 전달하기"], "준비물": ["월요일 실내화"] };
         let currentCategory = "안전"; let currentItem = ""; let lastCursorPosition = null;
